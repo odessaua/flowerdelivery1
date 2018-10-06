@@ -57,7 +57,7 @@ a:visited {font-size:16px; color:white}
 
 <div class="oops">
     <h1>OOOPS!</h1> 
-	<h2>We are very sorry!</h2>
+	<h2>We are sorry!</h2>
 	<h2>Something went wrong.<br> We are working on it.</h2><br>
     <span class="btn-purple"><a href="https://www.7roses.com">Return to Homepage</a></span>
 </div>
