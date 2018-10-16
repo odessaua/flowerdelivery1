@@ -162,7 +162,7 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
                 <li class="contact phones">
                     <div style="display:inline;"><a title="Call" href="tel:+380505620799">+38 050 562 0799</a><br>
 					<? 
-					echo CHtml::link(CHtml::image('/uploads/viber.png','viber', array('style'=>' display:inline;padding-right:5px;')), 'viber://chat?number=+380505620799', array('rel'=>'nofollow'));
+					echo CHtml::link(CHtml::image('/uploads/viber.png','viber', array('style'=>' display:inline;padding-right:5px;')), 'viber://chat?number=380505620799', array('rel'=>'nofollow'));
 					echo CHtml::link(CHtml::image('/uploads/whatsapp.png','watsapp', array('style'=>' display:inline;padding-right:5px;')), 'https://wa.me/380505620799', array('rel'=>'nofollow'));
 					echo CHtml::link(CHtml::image('/uploads/telegram.png','telegram', array('style'=>' display:inline;padding-right:5px;')), 'tg://resolve?domain=7roses', array('rel'=>'nofollow'));
 					echo CHtml::link(CHtml::image('/uploads/skype.png','skype', array('style'=>' display:inline;padding-right:5px;')), 'skype:sevenrosesodessa?chat', array('rel'=>'nofollow'));
