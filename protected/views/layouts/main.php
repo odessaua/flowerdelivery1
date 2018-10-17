@@ -164,7 +164,7 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
 					<? 
 					echo CHtml::link(CHtml::image('/uploads/viber.png','viber', array('style'=>' display:inline;padding-right:5px;')), 'viber://chat?number=380505620799', array('rel'=>'nofollow'));
 					echo CHtml::link(CHtml::image('/uploads/whatsapp.png','watsapp', array('style'=>' display:inline;padding-right:5px;')), 'https://wa.me/380505620799', array('rel'=>'nofollow'));
-					echo CHtml::link(CHtml::image('/uploads/telegram.png','telegram', array('style'=>' display:inline;padding-right:5px;')), 'tg://resolve?domain=7roses', array('rel'=>'nofollow'));
+					echo CHtml::link(CHtml::image('/uploads/telegram.png','telegram', array('style'=>' display:inline;padding-right:5px;')), 'tg://resolve?domain=seven_roses', array('rel'=>'nofollow'));
 					echo CHtml::link(CHtml::image('/uploads/skype.png','skype', array('style'=>' display:inline;padding-right:5px;')), 'skype:sevenrosesodessa?chat', array('rel'=>'nofollow'));
 					?>
 					</div>
