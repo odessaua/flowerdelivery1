@@ -71,6 +71,9 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
 	<meta property="og:title"              content="Ukraine Flower Delivery" />
 	<meta property="og:description"        content="7Roses offers same day flower delivery service Ukraine wide" />
 	<meta property="og:image"              content="https://7roses.com/uploads/logo-facebook.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="260" />
+	<meta property="og:image:height" content="260" />
 
 </head>
 <body>
