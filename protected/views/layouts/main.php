@@ -67,6 +67,11 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
 
 	<?= $this->canonical; // rel="canonical" ?>
 	<?= $this->hreflang; // rel="alternate" ... hreflang= ?>
+	<meta property="og:url"                content="https://7roses.com/" />
+	<meta property="og:title"              content="Ukraine Flower Delivery" />
+	<meta property="og:description"        content="7Roses offers same day flower delivery service Ukraine wide" />
+	<meta property="og:image"              content="/uploads/logo-link.png" />
+
 </head>
 <body>
 
