@@ -27,9 +27,10 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
 	<meta name="description" content="<?php echo CHtml::encode($this->pageDescription) ?>">
 	<meta name="keywords" content="<?php echo CHtml::encode($this->pageKeywords) ?>">
 	<meta name="viewport" content="width=device-width">
+	<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <?=$this->rels['prev']; // rel="prev" ?>
     <?=$this->rels['next']; // rel="next" ?>
-	<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	
     <!--[if lte IE 8]>
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -37,7 +38,6 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
     <![endif]-->
 	
     <link rel="stylesheet" href="<?php echo Yii::app()->theme->baseUrl ?>/assets/css/style.css"/>
-	<link rel="stylesheet" href="https://www.7roses.com/themes/default/assets/css/style.css"/>
     <?php
     // определение языка и переводы сообщений для JS
     $js_lang = (!empty(Yii::app()->language) && (Yii::app()->language != 'en'))
@@ -67,7 +67,7 @@ $this->widget('application.extensions.fancybox.EFancyBox', array(
 
 	<?= $this->canonical; // rel="canonical" ?>
 	<?= $this->hreflang; // rel="alternate" ... hreflang= ?>
-	<meta property="og:url"                content="https://7roses.com/" />
+	<meta property="og:url" content="<?=Yii::app()->request->hostInfo . Yii::app()->request->url ?>" />
 	<meta property="og:title"              content="Ukraine Flower Delivery" />
 	<meta property="og:description"        content="7Roses offers same day flower delivery service Ukraine wide" />
 	<meta property="og:image"              content="https://7roses.com/uploads/logo-facebook.png" />

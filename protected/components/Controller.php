@@ -173,11 +173,11 @@ class Controller extends RController
         $this->hreflang .= '<link rel="alternate" type="text/html" hreflang="en" href="'
             . Yii::app()->request->hostInfo
             . $this->createNewLanguageUrl()
-            . '" title="English"/>' . "\n";
+            . '" title="English"/>' . "\n\t";
         $this->hreflang .= '<link rel="alternate" type="text/html" hreflang="ru" href="'
             . Yii::app()->request->hostInfo
             . $this->createNewLanguageUrl('ru')
-            . '" title="Русский"/>' . "\n";
+            . '" title="Русский"/>' . "\n\t";
         $this->hreflang .= '<link rel="alternate" type="text/html" hreflang="uk" href="'
             . Yii::app()->request->hostInfo
             . $this->createNewLanguageUrl('uk')
