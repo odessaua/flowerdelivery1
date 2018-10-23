@@ -35,9 +35,12 @@ return array(
 			'elements'=>array(
 				'meta_title'=>array(
 					'type'=>'text',
+					'maxlength'=>75,
+					'label'=>'Title',
 				),
 				'meta_keywords'=>array(
 					'type'=>'textarea',
+					'label'=>'Keywords',
 				),
 				'meta_description'=>array(
 					'type'=>'textarea',

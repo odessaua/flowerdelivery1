@@ -25,12 +25,17 @@ return array(
 			'elements'=>array(
 				'meta_title'=>array(
 					'type'=>'text',
+					'hint'=>'Ограничение поле Title не более 70 символов',
+					'maxlength'=>68,
+					'size'=>70,
 				),
 				'meta_keywords'=>array(
 					'type'=>'textarea',
 				),
 				'meta_description'=>array(
 					'type'=>'textarea',
+					'maxlength'=>200,
+					'hint'=>'Ограничение поле Description не более 200 символов',
 				),
 			),
 		),

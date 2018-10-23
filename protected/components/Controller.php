@@ -221,7 +221,7 @@ class Controller extends RController
 
 	public function setPageTitle($title)
 	{
-		$this->_pageTitle=$title;
+		$this->_pageTitle=trim($title);
 	}
 
 
