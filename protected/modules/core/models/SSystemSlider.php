@@ -81,6 +81,7 @@ class SSystemSlider extends BaseModel
 				'relationName'=>'slide_translate',
 				'translateAttributes'=>array(
 					'name',
+					'photo',
 				),
 			),
 		);
