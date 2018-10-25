@@ -19,13 +19,21 @@ return array(
         ),
         'position'=>array(
             'type'=>'text',
-            'hint'=>Yii::t('StoreModule.admin', 'Оставьте пустым для установки максимального значения')
+            'hint'=>'Оставьте пустым для установки максимального значения',
         ),
         'active'=>array(
             'type'=>'dropdownlist',
             'items'=>array(
                 1=>'Да',
                 0=>'Нет'
+            ),
+        ),
+		'lang'=>array(
+            'type'=>'dropdownlist',
+            'items'=>array(
+                'en'=>'EN',
+                'ru'=>'RU',
+				'ua'=>'UA',
             ),
         ),
 	),

@@ -56,8 +56,9 @@ class SSystemSlider extends BaseModel
             array('name', 'required'),
             array('position, active', 'numerical', 'integerOnly'=>true),
             array('name, url, photo', 'length', 'max'=>255),
+			array('lang', 'length', 'max'=>2),
             // search attributes
-            array('id, name', 'safe', 'on'=>'search'),
+            array('id, name, lang', 'safe', 'on'=>'search'),
         );
     }
 
@@ -73,7 +74,7 @@ class SSystemSlider extends BaseModel
             'url'      => Yii::t('CoreModule.core', 'Ссылка'),
             'position'      => Yii::t('CoreModule.core', 'Позиция'),
             'active'      => Yii::t('CoreModule.core', 'Активен'),
-
+			'lang'      => Yii::t('CoreModule.core', 'Язык'),
         );
     }
 
@@ -88,6 +89,7 @@ class SSystemSlider extends BaseModel
         $criteria->compare('id',$this->id);
         $criteria->compare('name',$this->name,true);
         $criteria->compare('active',$this->active,true);
+		$criteria->compare('lang',$this->lang,true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
