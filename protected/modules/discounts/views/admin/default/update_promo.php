@@ -16,7 +16,7 @@ $title = ($model->isNewRecord) ? Yii::t('DiscountsModule.admin', 'Создани
 
 $this->breadcrumbs = array(
 	'Home'=>$this->createUrl('/admin'),
-	Yii::t('DiscountsModule.admin', 'Промо коды')=>$this->createUrl('index'),
+	Yii::t('DiscountsModule.admin', 'Промо коды')=>$this->createUrl('promo'),
 	($model->isNewRecord) ? Yii::t('DiscountsModule.admin', 'Создание промо кода') : CHtml::encode($model->name),
 );
 
