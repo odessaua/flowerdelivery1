@@ -28,14 +28,6 @@ return array(
                 0=>'Нет'
             ),
         ),
-		'lang'=>array(
-            'type'=>'dropdownlist',
-            'items'=>array(
-                'en'=>'EN',
-                'ru'=>'RU',
-				'ua'=>'UA',
-            ),
-        ),
 	),
 );
 

@@ -32,7 +32,7 @@ class SystemSliderController extends SAdminController
 			$model = new SSystemSlider;
 		else{
 			
-			$model = SSystemSlider::model()->findByPk($_GET['id']);
+			$model = SSystemSlider::model()->language($_GET)->findByPk($_GET['id']);
 			$photo = $model->photo;
 		}
 
@@ -48,7 +48,7 @@ class SystemSliderController extends SAdminController
 			if ($model->validate())
 			{
 				if($model->photo){
-					$model->photo->saveAs(Yii::getPathOfAlias('webroot').'/uploads/slider/'.$_POST['SSystemSlider']['lang'].'/'.$rand.$model->photo);				
+					$model->photo->saveAs(Yii::getPathOfAlias('webroot').'/uploads/slider/'.$rand.$model->photo);				
 					$model->photo=$rand.$model->photo;
 				}
 				else $model->photo = $photo;
@@ -58,7 +58,7 @@ class SystemSliderController extends SAdminController
 				    $model->save();
 
 				$this->setFlashMessage(Yii::t('CoreModule.core', 'Изменения успешно сохранены'));
-				
+
 				if (isset($_POST['REDIRECT']))
 					$this->smartRedirect($model);
 				else

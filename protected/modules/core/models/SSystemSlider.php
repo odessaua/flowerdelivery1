@@ -1,5 +1,5 @@
 <?php
-
+Yii::import('application.modules.core.models.SystemSliderTranslate');
 /**
  * This is the model class for table "SystemSlider".
  *
@@ -15,6 +15,8 @@ class SSystemSlider extends BaseModel
 {
 
     private static $_sliders;
+	
+	public $translateModelName = 'SystemSliderTranslate';
 
     /**
      * Returns the static model of the specified AR class.
@@ -56,11 +58,33 @@ class SSystemSlider extends BaseModel
             array('name', 'required'),
             array('position, active', 'numerical', 'integerOnly'=>true),
             array('name, url, photo', 'length', 'max'=>255),
-			array('lang', 'length', 'max'=>2),
             // search attributes
-            array('id, name, lang', 'safe', 'on'=>'search'),
+            array('id, name', 'safe', 'on'=>'search'),
         );
     }
+	
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		return array(
+			'slide_translate' => array(self::HAS_ONE, $this->translateModelName, 'object_id'),
+		);
+	}
+	
+	public function behaviors()
+	{
+		return array(
+			'STranslateBehavior'=>array(
+				'class'=>'ext.behaviors.STranslateBehavior',
+				'relationName'=>'slide_translate',
+				'translateAttributes'=>array(
+					'name',
+				),
+			),
+		);
+	}
 
     /**
      * @return array customized attribute labels (name=>label)
@@ -74,7 +98,7 @@ class SSystemSlider extends BaseModel
             'url'      => Yii::t('CoreModule.core', 'Ссылка'),
             'position'      => Yii::t('CoreModule.core', 'Позиция'),
             'active'      => Yii::t('CoreModule.core', 'Активен'),
-			'lang'      => Yii::t('CoreModule.core', 'Язык'),
+
         );
     }
 
@@ -89,7 +113,6 @@ class SSystemSlider extends BaseModel
         $criteria->compare('id',$this->id);
         $criteria->compare('name',$this->name,true);
         $criteria->compare('active',$this->active,true);
-		$criteria->compare('lang',$this->lang,true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,

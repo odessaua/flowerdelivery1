@@ -34,15 +34,9 @@ else{
             <?php if(!empty($slider)): ?>
                 <script src="<?php echo Yii::app()->theme->baseUrl ?>/assets/js/jquery.cycle.all.js"></script>
                 <div id="new_slider">
-                <?php foreach ($slider as $one) { 
-				$lang= Yii::app()->language;
-                    if($lang == 'ua')
-                        $lang = 'uk';
-
-                    $langArray = SSystemLanguage::model()->findByAttributes(array('code'=>$lang));
-				?>
+                <?php foreach ($slider as $one) { ?>
                     <a href="<?= Yii::app()->createUrl($one['url']); ?>" title="<?=$one['name']?>">
-                        <img width="812" height="282" src="<?= '/uploads/slider/'.$lang.'/'.$one['photo'] ?>" alt="<?=$one['name']?>"/>
+                        <img width="812" height="282" src="<?= '/uploads/slider/'.$one['photo'] ?>" alt="<?=$one['name']?>"/>
                     </a>
                 <?php } ?>
                 </div>

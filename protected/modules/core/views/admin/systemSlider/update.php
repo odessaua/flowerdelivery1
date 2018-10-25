@@ -3,7 +3,8 @@
 
     $this->topButtons = $this->widget('application.modules.admin.widgets.SAdminTopButtons', array(
         'form'=>$form,
-        'deleteAction'=>$this->createUrl('/pages/admin/default/delete', array('id'=>$model->id))
+        'deleteAction'=>$this->createUrl('/pages/admin/default/delete', array('id'=>$model->id)),
+		'langSwitcher'=>!$model->isNewRecord,
     ));
 
     $title = ($model->isNewRecord) ? Yii::t('CoreModule.admin', 'Создание слайда') :
