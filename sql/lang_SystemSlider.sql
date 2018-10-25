@@ -1,1 +1,0 @@
-ALTER TABLE SystemSlider ADD `lang` varchar(2) DEFAULT 'en';
