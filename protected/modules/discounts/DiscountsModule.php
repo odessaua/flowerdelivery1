@@ -10,7 +10,8 @@ class DiscountsModule extends BaseModule
 	public function init()
 	{
 		$this->setImport(array(
-			'application.modules.discounts.models.*'
+			'application.modules.discounts.models.*',
+			'application.modules.discounts.components.*'
 		));
 	}
 }
