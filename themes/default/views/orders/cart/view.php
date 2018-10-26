@@ -5,7 +5,13 @@
  */
 
 $rate =Yii::app()->currency->active->rate; // курс текущей валюты к USD
-$uah_full_price = Yii::app()->currency->convert($model->full_price, 2); // полная стоимость заказа (товары + доставка) в UAH для платёжных систем Украины
+
+$discount_price = $discount + StoreProduct::formatPrice($model->delivery_price*$rate, true);
+if(!empty($discount)){
+	$uah_full_price = $discount_price;
+}else{
+	$uah_full_price = Yii::app()->currency->convert($model->full_price, 2);
+}
 ?>
 <style>
 
@@ -119,7 +125,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
 							?> 
 						</p>
                        </div>
-					   <span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 					</li>				
 					
 <hr width=100%>
@@ -137,7 +147,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
 							?> 
 							</p>
                         </div>
-						<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 					</li>
 <hr width=100%>
 <?php endif; ?>
@@ -160,7 +174,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -180,7 +198,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -200,7 +222,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -221,7 +247,11 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php if(!empty($discount)){?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?>
+						<?php }else{?>
+							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
+						<?php }?>
 						</li>
 <?php endif; ?>
 </ul>
@@ -297,12 +327,14 @@ $wfp_p_names = $wfp_p_qtys = $wfp_p_prices = array(); // инфа для WayForP
 			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?></div>
 
 			</td></tr>
+			<?php if(!empty($discount)){ ?>
 			<tr>
 			<td width="40px" align="center"><img src="/uploads/sum.png" alt="Total sum" title="Total sum" width=24 height=24 /></td>
-			<td><span class="total"><?php echo Yii::t('OrdersModule.core','Order Total');?></span></td>
-			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?></div>
-
+			<td><span class="total"><?php echo Yii::t('OrdersModule.core','Сумма к оплате с учетом скидки');?></span></td>
+			<td width="25%"><div class="sum"><span class="price"><?php 
+			echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?></div>
 			</td></tr>
+			<?php }?>
 			</table>
 			</div>
         </td>

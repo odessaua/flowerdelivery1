@@ -244,6 +244,11 @@ echo '<ul class="breadcrumbs">
                     <?php echo CHtml::activeTextField($this->form,'phone2'); ?>
                     <?php echo CHtml::error($this->form,'phone2'); ?>
                 </div>
+				<div class="s1">
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
+                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+                    <?php echo CHtml::error($this->form,'coupon'); ?>
+                </div>
                 <div class="s1">
                     <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery Date:')?> </span>
                     

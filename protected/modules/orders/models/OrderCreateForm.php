@@ -24,6 +24,7 @@ class OrderCreateForm extends CFormModel
 	public $card_text;
 	public $phone1;
 	public $card_transl;
+	public $coupon;
 
 	public function init()
 	{

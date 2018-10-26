@@ -90,4 +90,23 @@ class Promo extends BaseModel
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getPromoDiscount($price, $code)
+	{
+		$model = Yii::app()->db->createCommand()->select( '*' )->from('Promo')->where('code=:code', array(':code' => $code))->queryRow();
+		$timestamp_start = strtotime($model['start_date']);
+		$timestamp_stop = strtotime($model['end_date']);
+		
+		if($timestamp_start <= time() && $timestamp_stop >= time() && $model['active'] == '1')
+		{
+			$percent = $model['sum'];
+			$number_percent = $price / 100 * $percent;
+			$result = $price - $number_percent;
+
+			return $result;
+		}else{
+			return false;
+		}
+		
+	}
 }

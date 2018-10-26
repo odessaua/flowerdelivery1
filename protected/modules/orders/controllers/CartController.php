@@ -2,6 +2,7 @@
 
 Yii::import('orders.models.*');
 Yii::import('store.models.*');
+Yii::import('discounts.models.*');
  // ini_set('display_errors', 1);
  // ini_set('display_startup_errors', 1);
   //error_reporting(E_ALL);
@@ -51,22 +52,47 @@ class CartController extends Controller
 		$cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
 		
+		$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
+		$code = $_POST['OrderCreateForm']['coupon'];
 
-
+		$discount = Promo::getPromoDiscount($total_price, $code);
 		
+		if(isset($discount) or $discount == true){
+		
+			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
+			{
+	
+				if(isset($_POST['OrderCreateForm']))
+				{
+					$this->form->attributes = $_POST['OrderCreateForm'];
+					$city=Yii::app()->session['_city'];
+					if($this->form->validate())
+					{
+						$order = $this->createOrder();
+						Yii::app()->cart->clear();
+						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
+						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'discount'=>$discount)));
+					}
+					
+				}
+	
+			}
+		}else{
+			$this->addFlashMessage(Yii::t('OrdersModule.core', 'Купон на скидку не действителен или не верный, оставьте поле пустым или введите действительный купон на скидку.'));
+		}
 		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 		{
+
 			if(isset($_POST['OrderCreateForm']))
 			{
 				$this->form->attributes = $_POST['OrderCreateForm'];
 				$city=Yii::app()->session['_city'];
 				if($this->form->validate())
 				{
-					// var_dump($_POST);die;
 					$order = $this->createOrder();
 					Yii::app()->cart->clear();
 					$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
-					Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key)));
+					Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'discount'=>$discount)));
 				}
 				
 			}
@@ -84,6 +110,7 @@ class CartController extends Controller
                 $items[$i_key]['translation'] = $this->translateProductInfo($item['product_id']);
             }
         }
+		
 		$this->render('index', array(
 			'items'           => $items,
 			'delivery_price'  => Yii::app()->session['_delivery_price'],
@@ -117,6 +144,7 @@ class CartController extends Controller
 	public function actionView()
 	{
 		$secret_key = Yii::app()->request->getParam('secret_key');
+		$discount = Yii::app()->request->getParam('discount');
 		$model = Order::model()->find('secret_key=:secret_key', array(':secret_key'=>$secret_key));
 	
 
@@ -153,7 +181,8 @@ class CartController extends Controller
 		$this->render('view', array(
 			'model'=>$model,
 			'rate'=>$rate,
-			'symbol'=>$symbol
+			'symbol'=>$symbol,
+			'discount'=>$discount
 		));
 	}
 	public function actionSuccess(){
