@@ -5,8 +5,7 @@
  */
 
 $rate =Yii::app()->currency->active->rate; // курс текущей валюты к USD
-
-$discount_price = $discount + StoreProduct::formatPrice($model->delivery_price*$rate, true);
+$discount_price = $discount;
 if(!empty($discount)){
 	$uah_full_price = $discount_price;
 }else{

@@ -53,9 +53,11 @@ class CartController extends Controller
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
 		
 		$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
+
+		$rate =Yii::app()->currency->active->rate;
 		$code = $_POST['OrderCreateForm']['coupon'];
 
-		$discount = Promo::getPromoDiscount($total_price, $code);
+		$discount = Promo::getPromoDiscount($total_price*$rate, $code);
 		
 		if(isset($discount) or $discount == true){
 		
@@ -71,7 +73,7 @@ class CartController extends Controller
 						$order = $this->createOrder();
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
-						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'discount'=>$discount)));
+						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'code'=>$code)));
 					}
 					
 				}
@@ -144,29 +146,35 @@ class CartController extends Controller
 	public function actionView()
 	{
 		$secret_key = Yii::app()->request->getParam('secret_key');
-		$discount = Yii::app()->request->getParam('discount');
+		$code = Yii::app()->request->getParam('code');
 		$model = Order::model()->find('secret_key=:secret_key', array(':secret_key'=>$secret_key));
-	
 
-		/*$deliveryPrice=Yii::app()->db->createCommand()
+		$deliveryPrice=Yii::app()->db->createCommand()
 							     ->select("c.delivery")
 							     ->from("city c")
 							     ->join('cityTranslate ct','ct.object_id=c.id')
 							     ->where('ct.name=:name', array(':name'=>Yii::app()->session['_city']))
 							     // ->where('ct.name=:name',':name'=>)_
 							     ->queryRow();
-		if (empty($deliveryPrice)) $deliveryPrice['delivery'] = 10; // стоимость доставки по умолчанию
+		/* if (empty($deliveryPrice)) $deliveryPrice['delivery'] = 10; // стоимость доставки по умолчанию
 		if(!empty($model->doPhoto)){$model->photo_price=$photoPrice;}
 		if(!empty($model->do_card)){$model->card_price=$cardPrice;}
 		$model->delivery_price=$deliveryPrice['delivery'];
-		$model->update();
-		*/
+		$model->update(); */
+		
 		$rate=Yii::app()->db->createCommand()
 							     ->select("rate")
 							     ->from("StoreCurrency")
 							     ->where('id=2')
 							     ->queryRow()['rate'];
 		$symbol=Yii::app()->currency->active['symbol'];
+		
+		$total_price = $model->full_price;
+
+		$rates =Yii::app()->currency->active->rate;
+
+		$discount = Promo::getPromoDiscount($total_price, $code);
+		
 		if(!$model)
 			throw new CHttpException(404, Yii::t('OrdersModule.core', 'Error. Order not found'));
 		
