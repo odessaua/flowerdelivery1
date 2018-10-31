@@ -22,15 +22,6 @@ $this->breadcrumbs = array(
 
 $this->pageHeader = $title;
 
-$this->widget('application.modules.admin.widgets.schosen.SChosen', array(
-	'elements'=>array('Discount_manufacturers', 'Discount_userRoles')
-));
-
-Yii::app()->clientScript->registerScriptFile(
-	$this->module->assetsUrl.'/admin/default.update.js',
-	CClientScript::POS_END
-);
-
 ?>
 
 <div class="form wide padding-all">

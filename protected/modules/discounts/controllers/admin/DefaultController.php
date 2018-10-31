@@ -11,10 +11,10 @@ class DefaultController extends SAdminController
 	 */
 	public function actionIndex()
 	{
-		$model = new Discount('search');
+		$model = new DiscountRegular('search');
 
-		if (!empty($_GET['Discount']))
-			$model->attributes = $_GET['Discount'];
+		if (!empty($_GET['DiscountRegular']))
+			$model->attributes = $_GET['DiscountRegular'];
 
 		$dataProvider = $model->orderByName()->search();
 		$dataProvider->pagination->pageSize = Yii::app()->settings->get('core', 'productsPerPageAdmin');
@@ -68,30 +68,19 @@ class DefaultController extends SAdminController
 	public function actionUpdate($new = false)
 	{
 		if ($new === true)
-			$model = new Discount;
+			$model = new DiscountRegular;
 		else
-			$model = Discount::model()->findByPk($_GET['id']);
+			$model = DiscountRegular::model()->findByPk($_GET['id']);
 
 		if (!$model)
 			throw new CHttpException(404, Yii::t('DiscountsModule.admin', 'Скидка не найдена.'));
 
 		if (Yii::app()->request->isPostRequest)
 		{
-			if(!isset($_POST['Discount']['manufacturers']))
-				$model->manufacturers = array();
-			if(!isset($_POST['Discount']['categories']))
-				$model->categories = array();
-			if(!isset($_POST['Discount']['userRoles']))
-				$model->userRoles = array();
-
-			$model->attributes = $_POST['Discount'];
+			$model->attributes = $_POST['DiscountRegular'];
 		}
 
 		$form = new STabbedForm('discounts.views.admin.default.discountForm', $model);
-
-		$form->additionalTabs = array(
-			Yii::t('DiscountsModule.admin','Категории') => $this->renderPartial('_categories', array('model'=>$model), true),
-		);
 
 		$form->summaryOnEachTab = true;
 

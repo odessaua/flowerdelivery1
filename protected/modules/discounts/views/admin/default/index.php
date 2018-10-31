@@ -50,6 +50,7 @@ $this->widget('ext.sgridview.SGridView', array(
 		),
 		'start_date',
 		'end_date',
+		'price',
 		// Buttons
 		array(
 			'class'=>'CButtonColumn',

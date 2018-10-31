@@ -1,6 +1,4 @@
 <?php
-
-Yii::import('application.modules.store.models.StoreManufacturer');
 Yii::import('application.modules.discounts.components.DiscountHelper');
 Yii::import('zii.widgets.jui.CJuiDatePicker');
 
@@ -21,6 +19,10 @@ return array(
 					'type'=>'text',
 					'hint'=>Yii::t('DiscountsModule.admin', 'Укажите целое число или процент. Например 10%.'),
 				),
+				'price'=>array(
+					'type'=>'text',
+					'hint'=>Yii::t('DiscountsModule.admin', 'Сумма оплаченых заказов пользователя после которой будет действовать скидка.'),
+				),
 				'start_date'=>array(
 					'type'=>'CJuiDatePicker',
 					'options'=>array(
@@ -32,19 +34,6 @@ return array(
 					'options'=>array(
 						'dateFormat'=>'yy-mm-dd '.date('H:i:s'),
 					),
-				),
-				'manufacturers'=>array(
-					'type'=>'dropdownlist',
-					'items'=>CHtml::listData(StoreManufacturer::model()->orderByName()->findAll(), 'id', 'name'),
-					'multiple'=>'multiple',
-					'data-placeholder'=>Yii::t('DiscountsModule.admin', 'Выберите производителя'),
-				),
-				'userRoles'=>array(
-					'type'=>'dropdownlist',
-					'items'=>DiscountHelper::getRoles(),
-					'multiple'=>'multiple',
-					'data-placeholder'=>Yii::t('DiscountsModule.admin', 'Выберите роли'),
-					'hint'=>Yii::t('DiscountsModule.admin', '<b>Внимание:</b> Скидки для администраторов запрещены.'),
 				),
 			)
 		)

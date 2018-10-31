@@ -1,9 +1,7 @@
 <?php
 
-class Promo extends BaseModel
+class DiscountRegular extends BaseModel
 {
-
-	public $generate = null;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -20,7 +18,7 @@ class Promo extends BaseModel
 	 */
 	public function tableName()
 	{
-		return 'Promo';
+		return 'DiscountRegular';
 	}
 
 	/**
@@ -45,13 +43,13 @@ class Promo extends BaseModel
 	public function rules()
 	{
 		return array(
-			array('name, sum, start_date, end_date, code', 'required'),
+			array('name, sum, start_date, end_date, price', 'required'),
 			array('active', 'boolean'),
 			array('name', 'length', 'max'=>255),
 			array('sum', 'length', 'max'=>10),
 			array('start_date, end_date', 'date','format'=>'yyyy-M-d H:m:s'),
 
-			array('id, name, active, sum, start_date, end_date, code', 'safe', 'on'=>'search'),
+			array('id, name, active, sum, start_date, end_date, price', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,7 +65,7 @@ class Promo extends BaseModel
 			'sum'           => Yii::t('DiscountsModule.core', 'Скидка'),
 			'start_date'    => Yii::t('DiscountsModule.core', 'Дата начала'),
 			'end_date'      => Yii::t('DiscountsModule.core', 'Дата окончания'),
-			'code'      => Yii::t('DiscountsModule.core', 'Промо код'),
+			'price'     => Yii::t('DiscountsModule.core', 'Сумма'),
 		);
 	}
 
@@ -85,28 +83,61 @@ class Promo extends BaseModel
 		$criteria->compare('t.sum',$this->sum,true);
 		$criteria->compare('t.start_date',$this->start_date, true);
 		$criteria->compare('t.end_date',$this->end_date, true);
+		$criteria->compare('t.price',$this->end_date, true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 	
-	public function getPromoDiscount($price, $code)
+	public function checkDiscount($price)
 	{
-		$model = Yii::app()->db->createCommand()->select( '*' )->from('Promo')->where('code=:code', array(':code' => $code))->queryRow();
-		$timestamp_start = strtotime($model['start_date']);
-		$timestamp_stop = strtotime($model['end_date']);
+		$model = Yii::app()->db->createCommand()->
+				select( '*' )->
+				from('DiscountRegular')->
+				where('active = "1"')->
+				queryAll();
+				
+		$regular_discount = DiscountRegular::calculateDiscount();
+		$result = preg_replace("/\..+/", "", $regular_discount);
 		
-		if($model == true && $timestamp_start <= time() && $timestamp_stop >= time() && $model['active'] == '1')
-		{
-			$percent = $model['sum'];
-			$number_percent = $price / 100 * $percent;
-			$result = $price - $number_percent;
+		if($result == $model[0]['price'] or $result > $model[0]['price']){
+			$timestamp_start = strtotime($model[0]['start_date']);
+			$timestamp_stop = strtotime($model[0]['end_date']);
+			
+		
+			if($timestamp_start <= time() && $timestamp_stop >= time() && $model[0]['active'] == '1')
+			{
+				$percent = $model[0]['sum'];
+				$number_percent = $price / 100 * $percent;
+				$result = $price - $number_percent;
 
-			return $result;
+				return $result;
+				
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}
-		
 	}
+	
+	public function calculateDiscount()
+	{
+		$regular_discount = Order::model()->findAll('`user_id` = '.Yii::app(  )->user->id.' AND `payment_status` = :ps',
+            array(
+                ':ps' => 'paid',
+            )
+        );
+		if(!empty($regular_discount)){
+			$eq = (string)0;
+			foreach($regular_discount as $data){
+				$eq += $data->total_price;
+			}
+			return (string)$eq;
+		}else{
+			return false;
+		}
+	}
+		
 }

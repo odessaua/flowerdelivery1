@@ -50,6 +50,41 @@ echo '<ul class="breadcrumbs">
 ?>
 
 <?php echo CHtml::form() ?>
+	<style type="text/css">
+		span {cursor:pointer; }
+		.minus, .plus{
+			width:10px;
+			height:10px;
+			background:#f2f2f2;
+			border-radius:4px;
+			padding:3px 5px 3px 5px;
+			border:1px solid #ddd;
+		}
+		input{
+			height:24px;
+			border:1px solid #ddd;
+			border-radius:4px;
+			padding:0 2px;
+		}
+	</style>
+	<script type="text/javascript" >
+		$(document).ready(function() {
+			$('.minus').click(function () {
+				var $input = $(this).parent().find('input');
+				var count = parseInt($input.val()) - 1;
+				count = count < 1 ? 1 : count;
+				$input.val(count);
+				$input.change();
+				return false;
+			});
+			$('.plus').click(function () {
+				var $input = $(this).parent().find('input');
+				$input.val(parseInt($input.val()) + 1);
+				$input.change();
+				return false;
+			});
+		});
+	</script>
 <div id="step1">
     <!-- breadcrumbs (begin) -->
     <ul class="breadcrumbs">
@@ -97,10 +132,17 @@ echo '<ul class="breadcrumbs">
                 <tfoot>
                 <tr>
                     <td colspan="6">
-                        <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?> 
-                            <span class="price" id="total"><?php echo StoreProduct::formatPrice($totalPrice, true) ?> </span>
+                        <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?>
+                            <span class="price" id="total"><?php 
+							
+							$regular_discount = DiscountRegular::checkDiscount($totalPrice);
+							if($regular_discount != false){
+								echo StoreProduct::formatPrice((string)$regular_discount, true);
+							}else{
+								echo StoreProduct::formatPrice($totalPrice, true);
+							}?> </span>
                         </div>
-                        <button class="btn-green btn-to-buy recount" name="recount" type="submit" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
+                        <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
                         <input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
                     </td>
                 </tr>
@@ -121,10 +163,7 @@ echo '<ul class="breadcrumbs">
                     </td>
                     <td>
                         <?php 
-                        //echo CHtml::link(CHtml::encode($product['model']->name), array('/store/frontProduct/view', 'url'=>$product['model']->url));
                         echo CHtml::link(CHtml::encode($product['translation']->name), array('/store/frontProduct/view', 'url'=>$product['model']->url));
-						//var_dump($product);
-                        // Display variant options
                         if(!empty($product['variant_models']))
                         {
                             echo "<br/>".CHtml::openTag('span', array('class'=>'cartProductOptions'));
@@ -138,14 +177,22 @@ echo '<ul class="breadcrumbs">
                             <?php $price = StoreProduct::calculatePrices($product['model'], $product['variant_models'], $product['configurable_id']);
                             echo StoreProduct::formatPrice(Yii::app()->currency->convert($price), true);
                             ?>
+							
                         </div>
                     </td>
+					
+					
                     <td class="ctab-input">
+					
+					<span class="minus">-</span>
                         <?= ($product['is_sale'] == 0)
                             ? CHtml::textField("quantities[$index]", $product['quantity'], array('class'=>'check-symbol'))
                             : CHtml::hiddenField("quantities[$index]", $product['quantity']);
                         ?>
+					<span class="plus">+</span>
                     </td>
+					
+
                     <td>
                         <div class="price">
                         <?php
@@ -163,14 +210,16 @@ echo '<ul class="breadcrumbs">
                 <?php endforeach ?>
                 </tbody>
             </table>
+			
+			<div class="s1">
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
+                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+                    <?php echo CHtml::error($this->form,'coupon'); ?>
+                </div>
     </div>
     <!-- cart-table (end) -->
 
 </div>
-
-
-
-
 
 <div id="step2">
     <!-- breadcrumbs (begin) -->
@@ -201,7 +250,6 @@ echo '<ul class="breadcrumbs">
         </div>
     </div>
     <!-- steps (end) -->
-
 
     <h1 class="page-title"><?php echo Yii::t('OrdersModule.core','Your order')?></h1>
 
@@ -243,11 +291,6 @@ echo '<ul class="breadcrumbs">
                     <span class="input-title"><?=Yii::t('OrdersModule.core','Phone &#8470;2:')?></span>
                     <?php echo CHtml::activeTextField($this->form,'phone2'); ?>
                     <?php echo CHtml::error($this->form,'phone2'); ?>
-                </div>
-				<div class="s1">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
-                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-                    <?php echo CHtml::error($this->form,'coupon'); ?>
                 </div>
                 <div class="s1">
                     <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery Date:')?> </span>
@@ -306,10 +349,7 @@ echo '<ul class="breadcrumbs">
                     <div class="tooltip" title="Additional info">
                         <div class="tip-info"><?=Yii::t('OrdersModule.core','Please add information in case you have it')?></div>
                     </div>
-                </div>
-                 
-
-              
+                </div> 
             </div>
             <!-- data-form (end) -->
             <!-- data-form (begin) -->
@@ -339,11 +379,7 @@ echo '<ul class="breadcrumbs">
                     <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Phone')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'phone'); ?>
                     <?php echo CHtml::error($this->form,'phone'); ?>
-                </div>
-                
-                
-                
-                
+                </div>  
             </div>
             <!-- data-form (end) -->
             <div class="links">
@@ -351,14 +387,12 @@ echo '<ul class="breadcrumbs">
                 <button class="link-next" type="submit" name="create" value="1"><?=Yii::t('OrdersModule.core','Order')?></button>
             </div>
     </div>
-
 </div>
 <?php echo CHtml::endForm() ?>
 
 <!-- related-products (begin) -->
 <?php $this->renderPartial('_extras'); ?>
 <!-- related-products (end) -->
-
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -390,13 +424,48 @@ $(document).ready(function(){
         $("#step1").show();
         $(".related-products").show();
     });
-    
-    $(".check-symbol").keyup(function(){
-        
+    $(".plus").click(function(e){
+        e.preventDefault();
+		$(".btntostep2").hide();
+        $(".recount").show();
+    });
+	$(".minus").click(function(e){
+        e.preventDefault();
         $(".btntostep2").hide();
         $(".recount").show();
         //location.reload();
         
+    });
+
+	$("#OrderCreateForm_coupon").keyup(function(){
+		code = $("#OrderCreateForm_coupon").val();
+		price_1 = $("#total").text();
+		price = price_1.substring(1);
+		postForm = {
+            'code'     : code,
+			'price'     : price,
+        };
+
+		$.ajax({
+        url: "/cart/GetCouponDiscount",
+        type: "post",
+        data: postForm ,
+        success: function (response) {
+			var trimmed = response.substring(1);
+			if(trimmed != '0.00'){
+				console.log(trimmed);
+				$("#total").text(response);
+				$("#OrderCreateForm_coupon").prop('disabled', true);
+				history.pushState(null, null, '/cart?code='+code);
+			}
+		   
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+           console.log(textStatus, errorThrown);
+        }
+
+
+    });
     });
 })
 </script>

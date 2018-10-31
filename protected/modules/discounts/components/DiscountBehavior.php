@@ -1,6 +1,6 @@
 <?php
 
-Yii::import('application.modules.discounts.models.Discount');
+Yii::import('application.modules.discounts.models.DiscountRegular');
 Yii::import('application.modules.discounts.DiscountsModule');
 
 /**
@@ -36,7 +36,7 @@ class DiscountBehavior extends CActiveRecordBehavior
 		{
 			if(DiscountBehavior::$discounts === null)
 			{
-				DiscountBehavior::$discounts = Discount::model()
+				DiscountBehavior::$discounts = DiscountRegular::model()
 					->activeOnly()
 					->applyDate()
 					->findAll();
@@ -59,7 +59,7 @@ class DiscountBehavior extends CActiveRecordBehavior
 		// Personal product discount
 		if(!empty($this->owner->discount))
 		{
-			$discount       = new Discount();
+			$discount       = new DiscountRegular();
 			$discount->name = Yii::t('DiscountsModule.core','Скидка');
 			$discount->sum  = $this->owner->discount;
 			$this->applyDiscount($discount);
@@ -72,30 +72,7 @@ class DiscountBehavior extends CActiveRecordBehavior
 			{
 				$apply = false;
 
-				// Validate category
-				if($this->searchArray($discount->categories, $this->ownerCategories))
-				{
-					$apply=true;
-
-					// Validate manufacturer
-					if(!empty($discount->manufacturers))
-						$apply = in_array($this->owner->manufacturer_id,$discount->manufacturers);
-
-					// Apply discount by user role. Discount for admin disabled.
-					if(!empty($discount->userRoles) && $user->checkAccess('Admin')!==true)
-					{
-						$apply = false;
-
-						foreach($discount->userRoles as $role)
-						{
-							if($user->checkAccess($role))
-							{
-								$apply = true;
-								break;
-							}
-						}
-					}
-				}
+				
 
 				if($apply===true)
 					$this->applyDiscount($discount);
@@ -105,7 +82,7 @@ class DiscountBehavior extends CActiveRecordBehavior
 		// Personal discount for users.
 		if(!$user->isGuest && !empty($user->model->discount) && !$this->hasDiscount())
 		{
-			$discount       = new Discount();
+			$discount       = new DiscountRegular();
 			$discount->name = Yii::t('DiscountsModule.core','Персональная скидка');
 			$discount->sum  = $user->model->discount;
 			$this->applyDiscount($discount);

@@ -2,6 +2,7 @@
 
 return array(
 	'cart'=>'orders/cart/index',
+	'cart/GetCouponDiscount'=>'orders/cart/GetCouponDiscount',
 
 	'/orders/cart/phone'=>'orders/cart/Phone',
 	'cart/add'=>'orders/cart/add',

@@ -34,16 +34,25 @@ class CartController extends Controller
 		$photoPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>17))['price'];
 		$cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
-	}		
-	 
+	} 
+	
+	public function actionGetCouponDiscount()
+	{
+		$total_price = $_POST['price'];
+		$code = $_POST['code'];
+		if(isset($code)){
+			Yii::app()->request->cookies['coupon'] = new CHttpCookie('coupon', $code);
+		}
+		$rate =Yii::app()->currency->active->rate;
+		
+		$discount = Promo::getPromoDiscount($total_price*$rate, $code);
+		echo StoreProduct::formatPrice($discount, true);
+	}
 	 
 	public function actionIndex()
 	{
+		
 		$this->setDeliveryPrices();
-
-		// Recount
-		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('recount') && !empty($_POST['quantities']))
-			$this->processRecount();
 		$total=0;
 		$this->form = new OrderCreateForm;
 		$rate=Yii::app()->currency->active['rate'];
@@ -51,19 +60,19 @@ class CartController extends Controller
 		$photoPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>17))['price'];
 		$cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
-		
-		$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
+		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('recount') && !empty($_POST['quantities']))
+			$this->processRecount();
+			$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
+	
+			$rate = Yii::app()->currency->active->rate;
+			$code = Yii::app()->request->cookies['coupon']->value;
+	
+			$discount = Promo::getPromoDiscount($total_price*$rate, $code);
 
-		$rate =Yii::app()->currency->active->rate;
-		$code = $_POST['OrderCreateForm']['coupon'];
-
-		$discount = Promo::getPromoDiscount($total_price*$rate, $code);
-		
-		if(isset($discount) or $discount == true){
+		if(isset($discount) or $discount == true && isset($regular_discount) or $regular_discount == true){
 		
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
-	
 				if(isset($_POST['OrderCreateForm']))
 				{
 					$this->form->attributes = $_POST['OrderCreateForm'];
@@ -124,6 +133,7 @@ class CartController extends Controller
 			'rate'			=> $rate,
 			'symbol'		=> $symbol,
             'popular' 		=> $this->getMainPage(),
+			'discount'=>$discount
 		));
 	}
 
@@ -169,7 +179,7 @@ class CartController extends Controller
 							     ->queryRow()['rate'];
 		$symbol=Yii::app()->currency->active['symbol'];
 		
-		$total_price = $model->full_price;
+		$total_price = $model->total_price;
 
 		$rates =Yii::app()->currency->active->rate;
 
