@@ -26,7 +26,7 @@ class User extends BaseModel
 
 	public $new_password;
 	public $verifyCode;
-	public $Total_Buy = 'Total Buy';
+	public $Total_Buy;
 
 	/**
 	 * Returns the static model of the specified AR class.
