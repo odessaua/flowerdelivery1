@@ -139,5 +139,19 @@ class DiscountRegular extends BaseModel
 			return false;
 		}
 	}
-		
+	
+	public function calculateDiscountById($id){
+		$regular_discount = Order::model()->findAll('`user_id` = '.$id.' AND `payment_status` = :ps',
+            array(
+                ':ps' => 'paid',
+            )
+        );
+		if(!empty($regular_discount)){
+			$eq = (string)0;
+			foreach($regular_discount as $data){
+				$eq += $data->total_price;
+			}
+			return (string)$eq;
+		}
+	}
 }

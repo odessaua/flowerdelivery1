@@ -1,6 +1,6 @@
 <?php
 	// Display list of users
-
+Yii::import('discounts.models.*');
 	$this->pageHeader = Yii::t('UsersModule.core', 'Список пользователей');
 	//$orders = sizeof($model->orders);
 	$this->breadcrumbs = array(
@@ -35,6 +35,11 @@
 				'type'=>'raw',
 				'value'=>'CHtml::link(CHtml::encode($data->username),array("update","id"=>$data->id))',
 			),
+			
+			array(
+				'name'=>'Total_Buy',
+				'value'=>'DiscountRegular::calculateDiscountById("$data->id")',
+			), 
 			'email',
 			'discount',
 			array(
