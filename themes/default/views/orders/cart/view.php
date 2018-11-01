@@ -325,7 +325,7 @@ $wfp_p_names = $wfp_p_qtys = $wfp_p_prices = array(); // инфа для WayForP
 			<td width="40px" align="center"><img src="/uploads/sum.png" alt="Total sum" title="Total sum" width=24 height=24 /></td>
 			<td><span class="total"><?php echo Yii::t('OrdersModule.core','Order Total');?></span></td>
 			<td width="25%"><div class="sum"><span class="price"><?php 
-			echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?></div>
+			//echo StoreProduct::formatPrice($discount_price, true)."</span> " ;?></div>
 			</td></tr>
 			<?php }else{?>
 			<tr>
