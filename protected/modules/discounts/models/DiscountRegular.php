@@ -124,12 +124,8 @@ class DiscountRegular extends BaseModel
 	
 	public function calculateDiscount()
 	{
-		$regular_discount = Order::model()->findAll('`user_id` = '.Yii::app(  )->user->id.' AND `payment_status` = :ps',
-            array(
-                ':ps' => 'paid',
-            )
-        );
-		if(!empty($regular_discount)){
+		$regular_discount = Order::model()->findAll('`user_id` = '.$id.'');
+		if(!empty($regular_discount) or $regular_discount['status_id'] == '6'){
 			$eq = (string)0;
 			foreach($regular_discount as $data){
 				$eq += $data->total_price;
@@ -141,11 +137,7 @@ class DiscountRegular extends BaseModel
 	}
 	
 	public function calculateDiscountById($id){
-		$regular_discount = Order::model()->findAll('`user_id` = '.$id.' AND `payment_status` = :ps',
-            array(
-                ':ps' => 'paid',
-            )
-        );
+		$regular_discount = Order::model()->findAll('`user_id` = '.$id.' AND status_id = 6');
 		if(!empty($regular_discount)){
 			$eq = (string)0;
 			foreach($regular_discount as $data){

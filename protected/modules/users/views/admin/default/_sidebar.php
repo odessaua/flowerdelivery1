@@ -1,4 +1,6 @@
 <?php
+Yii::import('discounts.models.*');
+$regular_discount = DiscountRegular::calculateDiscountById($model->id);
 
 $orders_msg = Yii::t('UsersModule.admin', 'Заказов: {count} на сумму {sum} {sym}', array(
 	'{count}' => sizeof($model->orders),
@@ -16,4 +18,6 @@ $comments_msg = Yii::t('UsersModule.admin', 'Комментариев: {count}',
 <h3><?=Yii::t('UsersModule.admin', 'Дополнительно')?></h3>
 
 <a href="/admin/orders/orders/?Order[user_id]=<?=$model->id?>"><?=$orders_msg?></a><br>
+<a href="/admin/orders/orders/?Order[user_id]=<?=$model->id?>">Оплачено заказов на сумму: <?php echo StoreProduct::formatPrice($regular_discount, true);?></a><br>
 <a href="/admin/comments/index/?Comment[user_id]=<?=$model->id?>"><?=$comments_msg?></a>
+
