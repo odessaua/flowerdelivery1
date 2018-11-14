@@ -90,36 +90,24 @@ class DiscountRegular extends BaseModel
 		));
 	}
 	
-	public function checkDiscount($price)
+	public static function checkDiscount($price)
 	{
+		$regular_discount = DiscountRegular::calculateDiscount();
+		$regular_discount = round($regular_discount);
+		
 		$model = Yii::app()->db->createCommand()->
 				select( '*' )->
 				from('DiscountRegular')->
-				where('active = "1"')->
+				where('active = "1" AND start_date <= CURRENT_TIMESTAMP() AND end_date >= CURRENT_TIMESTAMP() AND '.$regular_discount.' >= price')->
 				queryAll();
-				
-		$regular_discount = DiscountRegular::calculateDiscount();
-		$result = preg_replace("/\..+/", "", $regular_discount);
-		
-		if($result == $model[0]['price'] or $result > $model[0]['price']){
-			$timestamp_start = strtotime($model[0]['start_date']);
-			$timestamp_stop = strtotime($model[0]['end_date']);
-			
-		
-			if($timestamp_start <= time() && $timestamp_stop >= time() && $model[0]['active'] == '1')
-			{
+		if(isset($model)){
 				$percent = $model[0]['sum'];
-				$number_percent = $price / 100 * $percent;
-				$result = $price - $number_percent;
-
+				$result = $price - ($percent / 100 * $price);
 				return $result;
-				
-			}else{
-				return false;
-			}
 		}else{
-			return false;
+				return false;
 		}
+		
 	}
 	
 	public function calculateDiscount()

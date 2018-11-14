@@ -137,13 +137,14 @@ echo '<ul class="breadcrumbs">
 							
 							$regular_discount = DiscountRegular::checkDiscount($totalPrice);
 							if($regular_discount != false){
-								echo StoreProduct::formatPrice((string)$regular_discount, true);
+								echo StoreProduct::formatPrice($regular_discount, true);
 							}else{
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
                         <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
-                        <input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
+						<input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
+						<input style="display:none;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
                     </td>
                 </tr>
                 </tfoot>
@@ -416,6 +417,7 @@ $(document).ready(function(){
         $(".related-products").hide();
         $("#step2").show();
     });
+	
     
     $("#backToStep1").click(function(e){
         e.preventDefault();
@@ -438,6 +440,16 @@ $(document).ready(function(){
     });
 
 	$("#OrderCreateForm_coupon").keyup(function(){
+		$(".btntostep2").hide();
+        $("#goStep3").show();
+		
+    });
+	
+	$("#goStep3").click(function(e){
+        e.preventDefault();
+		$("#goStep2").show();
+		$("#goStep3").hide();
+
 		code = $("#OrderCreateForm_coupon").val();
 		price_1 = $("#total").text();
 		price = price_1.substring(1);
@@ -458,7 +470,6 @@ $(document).ready(function(){
 				$("#OrderCreateForm_coupon").prop('disabled', true);
 				history.pushState(null, null, '/cart?code='+code);
 			}
-		   
         },
         error: function(jqXHR, textStatus, errorThrown) {
            console.log(textStatus, errorThrown);

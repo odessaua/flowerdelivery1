@@ -91,7 +91,7 @@ class Promo extends BaseModel
 		));
 	}
 	
-	public function getPromoDiscount($price, $code)
+	public static function getPromoDiscount($price, $code)
 	{
 		$model = Yii::app()->db->createCommand()->select( '*' )->from('Promo')->where('code=:code', array(':code' => $code))->queryRow();
 		$timestamp_start = strtotime($model['start_date']);
