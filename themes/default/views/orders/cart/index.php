@@ -133,9 +133,10 @@ echo '<ul class="breadcrumbs">
                 <tr>
                     <td colspan="6">
                         <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?>
-                            <span class="price" id="total"><?php 
-							
+                            <span class="price" id="total">
+							<?php if(!Yii::app()->user->isGuest){
 							$regular_discount = DiscountRegular::checkDiscount($totalPrice);
+							}
 							if($regular_discount != false){
 								echo StoreProduct::formatPrice($regular_discount, true);
 							}else{
