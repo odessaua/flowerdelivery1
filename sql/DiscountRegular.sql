@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-10-31 14:11:27
+Date: 2018-11-15 16:11:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,7 +26,8 @@ CREATE TABLE `DiscountRegular` (
   `sum` varchar(10) DEFAULT '',
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
-  `price` int(255) DEFAULT NULL,
+  `min_price` int(255) DEFAULT NULL,
+  `max_price` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `active` (`active`),
   KEY `start_date` (`start_date`),
@@ -36,5 +37,5 @@ CREATE TABLE `DiscountRegular` (
 -- ----------------------------
 -- Records of DiscountRegular
 -- ----------------------------
-INSERT INTO `DiscountRegular` VALUES ('1', '7roses', '1', '10', '2018-10-25 13:40:07', '2018-10-31 13:40:07', '466');
-INSERT INTO `DiscountRegular` VALUES ('2', '2', '1', '20', '2018-10-30 10:25:40', '2018-11-30 10:25:40', '3000');
+INSERT INTO `DiscountRegular` VALUES ('1', 'Test1', '1', '10', '2018-10-25 13:40:07', '2018-11-30 09:45:28', '1000', '1999');
+INSERT INTO `DiscountRegular` VALUES ('2', 'Test2', '1', '20', '2018-10-30 10:25:40', '2018-11-30 10:25:40', '2000', '3000');
