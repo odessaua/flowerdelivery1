@@ -43,13 +43,13 @@ class DiscountRegular extends BaseModel
 	public function rules()
 	{
 		return array(
-			array('name, sum, start_date, end_date, price', 'required'),
+			array('name, sum, start_date, end_date, min_price, max_price', 'required'),
 			array('active', 'boolean'),
 			array('name', 'length', 'max'=>255),
 			array('sum', 'length', 'max'=>10),
 			array('start_date, end_date', 'date','format'=>'yyyy-M-d H:m:s'),
 
-			array('id, name, active, sum, start_date, end_date, price', 'safe', 'on'=>'search'),
+			array('id, name, active, sum, start_date, end_date, min_price, max_price', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,7 +65,8 @@ class DiscountRegular extends BaseModel
 			'sum'           => Yii::t('DiscountsModule.core', 'Скидка'),
 			'start_date'    => Yii::t('DiscountsModule.core', 'Дата начала'),
 			'end_date'      => Yii::t('DiscountsModule.core', 'Дата окончания'),
-			'price'     => Yii::t('DiscountsModule.core', 'Сумма'),
+			'min_price'     => Yii::t('DiscountsModule.core', 'Минимальная сумма'),
+			'max_price'     => Yii::t('DiscountsModule.core', 'Максимальная сумма'),
 		);
 	}
 
@@ -83,7 +84,8 @@ class DiscountRegular extends BaseModel
 		$criteria->compare('t.sum',$this->sum,true);
 		$criteria->compare('t.start_date',$this->start_date, true);
 		$criteria->compare('t.end_date',$this->end_date, true);
-		$criteria->compare('t.price',$this->end_date, true);
+		$criteria->compare('t.min_price',$this->end_date, true);
+		$criteria->compare('t.max_price',$this->end_date, true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -95,17 +97,22 @@ class DiscountRegular extends BaseModel
 		$regular_discount = DiscountRegular::calculateDiscount();
 		$regular_discount = round($regular_discount);
 		
-		$model = Yii::app()->db->createCommand()->
-				select( '*' )->
-				from('DiscountRegular')->
-				where('active = "1" AND start_date <= CURRENT_TIMESTAMP() AND end_date >= CURRENT_TIMESTAMP() AND '.$regular_discount.' >= price')->
-				queryAll();
-		if(isset($model)){
-				$percent = $model[0]['sum'];
+		$models = Yii::app()->db->createCommand()->
+        select( '*' )->
+        from('DiscountRegular')->
+        where('active = "1" AND start_date <= CURRENT_TIMESTAMP() AND end_date >= CURRENT_TIMESTAMP()')->
+        queryAll();
+		$coupon = $models;
+		
+		
+		for($i = 0; $i < count($coupon); $i++) {
+			if ($regular_discount >= $coupon[$i]['min_price'] && $regular_discount <= $coupon[$i]['max_price']) {
+				echo '<pre>';
+				$percent = $coupon[$i]['sum'];
 				$result = $price - ($percent / 100 * $price);
 				return $result;
-		}else{
-				return false;
+				
+			}
 		}
 		
 	}
