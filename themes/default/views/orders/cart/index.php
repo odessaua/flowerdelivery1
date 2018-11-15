@@ -440,7 +440,7 @@ $(document).ready(function(){
         
     });
 
-	$("#OrderCreateForm_coupon").keyup(function(){
+	$("#OrderCreateForm_coupon").on('input', function () {
 		$(".btntostep2").hide();
         $("#goStep3").show();
 		
