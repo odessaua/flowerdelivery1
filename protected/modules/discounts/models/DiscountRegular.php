@@ -104,14 +104,18 @@ class DiscountRegular extends BaseModel
         queryAll();
 		$coupon = $models;
 		
-		
 		for($i = 0; $i < count($coupon); $i++) {
 			if ($regular_discount >= $coupon[$i]['min_price'] && $regular_discount <= $coupon[$i]['max_price']) {
-				echo '<pre>';
 				$percent = $coupon[$i]['sum'];
 				$result = $price - ($percent / 100 * $price);
-				return $result;
+				$minus = (string)$percent / 100 * $price;
 				
+				$data = [
+					'result' => $result,
+					'percent' => $percent,
+					'minus' => $minus
+				];
+				return $data;
 			}
 		}
 		

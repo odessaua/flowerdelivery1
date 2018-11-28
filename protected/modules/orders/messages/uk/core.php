@@ -14,6 +14,8 @@ return array(
     'Done'=>'Готово',
     'Photo'=>'Фотографія',
     'Sum'=>'Сума',
+	'Your discount is: '=>'Ваша накопичувальна знижка: ',
+	'Your promo discount is: &nbsp;'=>'Ваша знижка по промо коду: &nbsp;',
 	'Coupon'=>'Купон на знижку:',
     'Action'=>'Дія',
     'Quantity'=>'Кількість',

@@ -100,10 +100,14 @@ class Promo extends BaseModel
 		if($model == true && $timestamp_start <= time() && $timestamp_stop >= time() && $model['active'] == '1')
 		{
 			$percent = $model['sum'];
-			$number_percent = $price / 100 * $percent;
+			$number_percent = (string)$price / 100 * $percent;
 			$result = $price - $number_percent;
-
-			return $result;
+			$data = [
+					'result' => $result,
+					'percent' => $percent,
+					'minus' => $number_percent
+				];
+			return $data;
 		}else{
 			return false;
 		}

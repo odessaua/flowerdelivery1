@@ -135,10 +135,15 @@ echo '<ul class="breadcrumbs">
                         <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?>
                             <span class="price" id="total">
 							<?php if(!Yii::app()->user->isGuest){
-							$regular_discount = DiscountRegular::checkDiscount($totalPrice);
+								$regular_discount = DiscountRegular::checkDiscount($totalPrice);
 							}
 							if($regular_discount != false){
-								echo StoreProduct::formatPrice($regular_discount, true);
+								echo '<b id="price_res">'.StoreProduct::formatPrice($regular_discount['result'], true). '</b>';
+								echo '<br>';
+								echo '<br>'.Yii::t('OrdersModule.core','Your discount is: ');
+								echo $regular_discount['percent'] .'% -'.StoreProduct::formatPrice($regular_discount['minus'], true).'<b>';
+								echo '<br><div id="mess_dis" style="display: none;">' .Yii::t('OrdersModule.core','Your promo discount is: &nbsp;');
+								echo '<div id="discount_mess"></div> % -<div id="minus"></div></div>';
 							}else{
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
@@ -440,7 +445,7 @@ $(document).ready(function(){
         
     });
 
-	$("#OrderCreateForm_coupon").on('input', function () {
+	$("#OrderCreateForm_coupon").keyup(function () {
 		$(".btntostep2").hide();
         $("#goStep3").show();
 		
@@ -452,11 +457,11 @@ $(document).ready(function(){
 		$("#goStep3").hide();
 
 		code = $("#OrderCreateForm_coupon").val();
-		price_1 = $("#total").text();
+		price_1 = $("#price_res").text();
 		price = price_1.substring(1);
 		postForm = {
-            'code'     : code,
-			'price'     : price,
+            'code': code,
+			'price': price,
         };
 
 		$.ajax({
@@ -464,12 +469,17 @@ $(document).ready(function(){
         type: "post",
         data: postForm ,
         success: function (response) {
+			var returnedData = JSON.parse(response);
 			var trimmed = response.substring(1);
 			if(trimmed != '0.00'){
-				console.log(trimmed);
-				$("#total").text(response);
-				$("#OrderCreateForm_coupon").prop('disabled', true);
-				history.pushState(null, null, '/cart?code='+code);
+				$("#price_res").text(returnedData['price']);
+				$("#discount_mess").text(returnedData['percent']);
+				$("#minus").text(returnedData['minus']);
+				$("#mess_dis").css({"display": "-webkit-inline-box"});
+				//$("#OrderCreateForm_coupon").prop('disabled', true);
+				//history.pushState(null, null, '/cart?code='+code);
+			}else{
+				console.log('error');
 			}
         },
         error: function(jqXHR, textStatus, errorThrown) {
