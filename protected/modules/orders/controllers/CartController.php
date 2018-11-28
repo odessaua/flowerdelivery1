@@ -70,14 +70,13 @@ class CartController extends Controller
 			$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
 	
 			$rate = Yii::app()->currency->active->rate;
-			$code = Yii::app()->request->cookies['coupon']->value;
-	
-			$discount = Promo::getPromoDiscount($total_price*$rate, $code);
 
-		if(isset($discount) or $discount == true && isset($regular_discount) or $regular_discount == true){
-		
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
+				$price = $_POST['price'];
+
+				$discount = urldecode((string)$price);
+				$matn = mb_substr($price,1);
 				if(isset($_POST['OrderCreateForm']))
 				{
 					$this->form->attributes = $_POST['OrderCreateForm'];
@@ -87,32 +86,12 @@ class CartController extends Controller
 						$order = $this->createOrder();
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
-						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'code'=>$code)));
+						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'price'=>$matn)));
 					}
 					
 				}
 	
-			}
-		}else{
-			$this->addFlashMessage(Yii::t('OrdersModule.core', 'Купон на скидку не действителен или не верный, оставьте поле пустым или введите действительный купон на скидку.'));
-		}
-		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
-		{
-
-			if(isset($_POST['OrderCreateForm']))
-			{
-				$this->form->attributes = $_POST['OrderCreateForm'];
-				$city=Yii::app()->session['_city'];
-				if($this->form->validate())
-				{
-					$order = $this->createOrder();
-					Yii::app()->cart->clear();
-					$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
-					Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'discount'=>$discount)));
-				}
-				
-			}
-
+			
 		}
 		$deliveryMethods = StoreDeliveryMethod::model()
 			->applyTranslateCriteria()
@@ -401,7 +380,11 @@ class CartController extends Controller
 		$photoPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>17))['price'];
 		$cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
-		
+		$lang= Yii::app()->language;
+                    if($lang == 'ua')
+                        $lang = 'uk';
+
+                    $langArray = SSystemLanguage::model()->findByAttributes(array('code'=>$lang));
 		// Set main data
 		$order->user_id      = Yii::app()->user->isGuest ? null : Yii::app()->user->id;
 		$order->user_name    = $this->form->name;

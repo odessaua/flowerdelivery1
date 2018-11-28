@@ -388,6 +388,7 @@ echo '<ul class="breadcrumbs">
                     <?php echo CHtml::error($this->form,'phone'); ?>
                 </div>  
             </div>
+			<input type="hidden" id="hidden_price" name="price" value="">
             <!-- data-form (end) -->
             <div class="links">
                 <a class="link-prev" href="#" title="" id="backToStep1"><?=Yii::t('OrdersModule.core','Back')?></a>
@@ -422,6 +423,9 @@ $(document).ready(function(){
         $("#step1").hide();
         $(".related-products").hide();
         $("#step2").show();
+		price_1 = $("#price_res").text();
+		$("#hidden_price").val(price_1);
+		
     });
 	
     

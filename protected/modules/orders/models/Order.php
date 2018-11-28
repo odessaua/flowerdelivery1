@@ -76,7 +76,7 @@ class Order extends BaseModel
 			array('paid', 'boolean'),
 			array('image', 'file', 'types'=>'png, jpg, jpeg, gif', 'allowEmpty' => true),
 			// Search
-			array('id, user_id, payment_id, payment_status, delivery_price, total_price, status_id, paid, user_name, user_email, user_address, user_phone, user_comment, receiver_city, datetime_del, ip_address, created, updated', 'safe', 'on'=>'search'),
+			array('id, user_id, payment_id, payment_status, delivery_price, total_price, status_id, paid, user_name, user_email, user_address, user_phone, user_comment, receiver_city, datetime_del, ip_address, created, updated, lang', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -150,6 +150,7 @@ class Order extends BaseModel
 			'country'		 => Yii::t('OrdersModule.core','Sender Country'),
 			'city'			 => Yii::t('OrdersModule.core','Sender City'),
 			'do_card'		 => Yii::t('OrdersModule.core','Greeting Card'),
+			'lang'		 => Yii::t('OrdersModule.core','Language'),
 			
 		);
 	}
@@ -445,6 +446,7 @@ class Order extends BaseModel
 		$criteria->compare('ip_address',$this->ip_address,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('updated',$this->updated,true);
+		$criteria->compare('lang',$this->lang,true);
 
 		$sort=new CSort;
 		$sort->defaultOrder = $this->getTableAlias().'.created DESC';
