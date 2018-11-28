@@ -469,8 +469,7 @@ $(document).ready(function(){
         
     });
 
-	$("#OrderCreateForm_coupon").keyup(function () {
-		$(".btntostep2").hide();
+	$("#OrderCreateForm_coupon").change(function () {
 		$("#goStep3").prop('disabled', false);
 		
     });
