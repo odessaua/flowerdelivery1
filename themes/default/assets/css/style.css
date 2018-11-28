@@ -1688,7 +1688,7 @@ text-align: center;
 .s2,
 .s3 {
   display: inline-block;
-  margin: 15px 10px 0 0;
+  margin: -8px 10px 0 0;
   vertical-align: top;
 }
 .s1:first-child,

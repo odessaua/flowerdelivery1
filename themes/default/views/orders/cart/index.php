@@ -139,23 +139,29 @@ echo '<ul class="breadcrumbs">
 							}
 							if($regular_discount != false){
 								echo '<b id="price_res">'.StoreProduct::formatPrice($regular_discount['result'], true). '</b>';
-								echo '<br>';
-								echo '<br>'.Yii::t('OrdersModule.core','Your discount is: ');
-								echo $regular_discount['percent'] .'% -'.StoreProduct::formatPrice($regular_discount['minus'], true).'<b>';
-								echo '<br><div id="mess_dis" style="display: none;">' .Yii::t('OrdersModule.core','Your promo discount is: &nbsp;');
-								echo '<div id="discount_mess"></div> % -<div id="minus"></div></div>';
+								echo '<b style="float: left;margin-right: 20px;color: #6b716c; text-decoration:line-through">' .StoreProduct::formatPrice($totalPrice, true). '</b>';
 							}else{
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
+				<div class="s1" style="float: left; margin-bottom: 40px;">
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
+                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+                    <?php echo CHtml::error($this->form,'coupon'); ?>
+                </div>
+				<input style="margin-top: 10px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
+				<br>
+				<div style="clear: both;">
                         <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
 						<input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
-						<input style="display:none;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
                     </td>
+				<div>
                 </tr>
+				
                 </tfoot>
                 <tbody>
                 <?php foreach($items as $index=>$product): ?>
+				
                 <tr>
                     <td class="ctab-img">
                         <a href="#" title="" rel="nofollow">
@@ -215,14 +221,28 @@ echo '<ul class="breadcrumbs">
                     </td>
                 </tr>
                 <?php endforeach ?>
+
+				<?php if($regular_discount != false){?>
+				<tr class="price">
+                    <td colspan="3"style="text-align: left;">
+						<?php echo '<br>'.Yii::t('OrdersModule.core','Your discount is: ').''. $regular_discount['percent'] .'%';?>
+                    </td>
+					<td>
+						<?php echo '-'.StoreProduct::formatPrice($regular_discount['minus'], true);?>
+                    </td>
+                </tr>
+				<tr class="price" id="mess_dis" style="display: none;">
+                    <td colspan="3"style="text-align: left;">
+						<?php echo '' .Yii::t('OrdersModule.core','Your promo discount is: &nbsp;');?><div style="display: -webkit-inline-box;" id="discount_mess"></div>%
+                    </td>
+					<td>
+						<div id="minus"></div>
+                    </td>
+                </tr>
+				
+				<?php }?>
                 </tbody>
             </table>
-			
-			<div class="s1">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
-                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-                    <?php echo CHtml::error($this->form,'coupon'); ?>
-                </div>
     </div>
     <!-- cart-table (end) -->
 
@@ -478,8 +498,8 @@ $(document).ready(function(){
 			if(trimmed != '0.00'){
 				$("#price_res").text(returnedData['price']);
 				$("#discount_mess").text(returnedData['percent']);
-				$("#minus").text(returnedData['minus']);
-				$("#mess_dis").css({"display": "-webkit-inline-box"});
+				$("#minus").text('-'+returnedData['minus']);
+				$("#mess_dis").css({"display": "table-row"});
 				//$("#OrderCreateForm_coupon").prop('disabled', true);
 				//history.pushState(null, null, '/cart?code='+code);
 			}else{
