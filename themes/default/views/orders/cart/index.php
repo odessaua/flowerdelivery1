@@ -149,7 +149,7 @@ echo '<ul class="breadcrumbs">
                     <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
                     <?php echo CHtml::error($this->form,'coupon'); ?>
                 </div>
-				<input style="margin-top: 10px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
+				<input disabled style="margin-top: 10px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
 				<br>
 				<div style="clear: both;">
                         <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
@@ -471,14 +471,13 @@ $(document).ready(function(){
 
 	$("#OrderCreateForm_coupon").keyup(function () {
 		$(".btntostep2").hide();
-        $("#goStep3").show();
+		$("#goStep3").prop('disabled', false);
 		
     });
 	
 	$("#goStep3").click(function(e){
         e.preventDefault();
 		$("#goStep2").show();
-		$("#goStep3").hide();
 
 		code = $("#OrderCreateForm_coupon").val();
 		price_1 = $("#price_res").text();
