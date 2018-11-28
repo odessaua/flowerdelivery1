@@ -385,6 +385,8 @@ class CartController extends Controller
                         $lang = 'uk';
 
                     $langArray = SSystemLanguage::model()->findByAttributes(array('code'=>$lang));
+		var_dump($langArray);
+		die;
 		// Set main data
 		$order->user_id      = Yii::app()->user->isGuest ? null : Yii::app()->user->id;
 		$order->user_name    = $this->form->name;

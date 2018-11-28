@@ -144,7 +144,7 @@ echo '<ul class="breadcrumbs">
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
-				<div class="s1" style="float: left; margin-bottom: 40px;">
+				<div style="float: left; margin-bottom: 40px; display: inline-block;margin: -4px 10px 0 0;vertical-align: top;">
                     <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
                     <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
                     <?php echo CHtml::error($this->form,'coupon'); ?>
