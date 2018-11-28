@@ -499,6 +499,7 @@ $(document).ready(function(){
 				$("#discount_mess").text(returnedData['percent']);
 				$("#minus").text('-'+returnedData['minus']);
 				$("#mess_dis").css({"display": "table-row"});
+				$("#goStep3").prop('disabled', true);
 				//$("#OrderCreateForm_coupon").prop('disabled', true);
 				//history.pushState(null, null, '/cart?code='+code);
 			}else{
