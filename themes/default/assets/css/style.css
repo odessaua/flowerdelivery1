@@ -189,6 +189,17 @@ select {
 clear: both;
 padding:20px 20px 0 0;
 }
+.btn-inactive {
+  text-align: center;
+  color: #fff;
+  font: bold 12px/20px "Verdana", serif;
+  width: 120px;
+ /* height: 26px;  */
+  background-color: #909090;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px !important;
+}
 .catalog .products_list .list-view { margin-top: 1 rem }
 .btn-purple {
   text-align: center;
@@ -1978,7 +1989,8 @@ margin-top: 10px;
   margin-top:50px;
 }
 .pp-right .btn-purple,
-.pp-right .btn-green {
+.pp-right .btn-green,
+.pp-right .btn-inactive  {
   display: block;
   margin: 10px 0;
   width: 220px;
@@ -1986,6 +1998,7 @@ margin-top: 10px;
   font-size: 18px;
   line-height: 40px;
 }
+
 .pp-right select {
   display: inline-block;
   width: auto;

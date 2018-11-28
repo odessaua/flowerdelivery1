@@ -233,7 +233,35 @@ $img_title = (!empty($model->img_title)) ? $model->img_title : $model->name;
 	                    <span id="phoneOrder" class="btn-green call-back-order"><?=Yii::t('StoreModule.core','Order by phone')?></span>
 	                    <span class="link-del-way"><?=Yii::t('StoreModule.core','Payment methods')?></span>
                         <?php else: ?>
-                        <span class="product-unavailable"><?=Yii::t('StoreModule.core', 'This product is unavailable temporary'); ?></span>
+                        <div class="pp-reg">
+	                        <div class="sort sort-reg">
+
+	                            <?php $this->renderFile(Yii::getPathOfAlias('pages.views.pages.popup_regions').'.php', array('no_redirect' => true)); ?>
+
+	                        </div>
+	                        <p><?=Yii::t('StoreModule.core','Assortment depends on the city')?></p>
+	                    </div>
+	                    <?php
+							echo CHtml::hiddenField('product_id', $model->id);
+							echo CHtml::hiddenField('product_price', $model->price);
+							echo CHtml::hiddenField('use_configurations', $model->use_configurations);
+							echo CHtml::hiddenField('currency_rate', Yii::app()->currency->active->rate);
+							echo CHtml::hiddenField('configurable_id', 0);
+							echo CHtml::hiddenField('quantity', 1);
+
+							if($model->isAvailable)
+							{
+								echo '<span disabled class="btn-inactive">'. Yii::t('StoreModule.core','Currently unavailable').'</span>';
+							}
+							else
+							{
+								echo CHtml::link(Yii::t('StoreModule.core','Report appearance'), '#', array(
+									'onclick' => 'showNotifierPopup('.$model->id.'); return false;',
+								));
+							}
+						?>
+						<span id="phoneOrder" class="btn-green call-back-order"><?=Yii::t('StoreModule.core','Order by phone')?></span>
+	                    <span class="link-del-way"><?=Yii::t('StoreModule.core','Payment methods')?></span>
                         <?php endif; ?>
 
 	               <?php echo CHtml::endForm();?>
