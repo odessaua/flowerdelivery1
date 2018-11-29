@@ -1,0 +1,2 @@
+ALTER TABLE `Order` ADD `admin_id` int(10) NOT NULL DEFAULT 0;
+ALTER TABLE `Order` ADD `lang` int(10) NOT NULL DEFAULT 0;

@@ -214,7 +214,7 @@ class OrdersController extends SAdminController {
             }
 			if($model->validate())
 			{	
-
+				$model->admin_id = Yii::app()->user->id;
 				$model->save();
 				if(sizeof(Yii::app()->request->getPost('quantity', array())))
 					$model->setProductQuantities(Yii::app()->request->getPost('quantity'));

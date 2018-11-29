@@ -383,10 +383,6 @@ class CartController extends Controller
 		$lang= Yii::app()->language;
                     if($lang == 'ua')
                         $lang = 'uk';
-
-                    $langArray = SSystemLanguage::model()->findByAttributes(array('code'=>$lang));
-		var_dump($langArray);
-		die;
 		// Set main data
 		$order->user_id      = Yii::app()->user->isGuest ? null : Yii::app()->user->id;
 		$order->user_name    = $this->form->name;
@@ -407,6 +403,7 @@ class CartController extends Controller
 		$order->card_text = $this->form->card_text;
 		$order->card_transl = $this->form->card_transl;
 		$order->delivery_price = $deliveryPrice;
+		$order->lang = $lang;
 		if(!empty($order->doPhoto)){$order->photo_price=$photoPrice;}
 		if(!empty($order->do_card)){$order->card_price=$cardPrice;}
 		if(!empty($order->card_transl)){$order->transl_price=$translPrice;}

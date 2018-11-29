@@ -1,6 +1,7 @@
 <?php
 
 Yii::import('orders.components.SProductsPreviewColumn');
+Yii::import('orders.components.OrderQuantityColumn');
 
 /**
  * Display orders list
@@ -68,6 +69,11 @@ $this->widget('ext.sgridview.SGridView', array(
 			'type'=>'raw',
 			'value'=>'CHtml::link(CHtml::encode($data->receiver_city), array("/orders/admin/orders/update", "id"=>$data->id))',
 		),
+		array(
+			'name'=>'city',
+			'type'=>'raw',
+			'value'=>'OrderQuantityColumn::transliterate($data->city)',
+		),
 		'user_name',
 		'datetime_del',
 		'user_email',
@@ -96,6 +102,8 @@ $this->widget('ext.sgridview.SGridView', array(
 			'value'=>'StoreProduct::formatPrice($data->full_price)',
 		),
 		'created',
+		'lang',
+		'admin_id',
 		// Buttons
 		array(
 			'class'=>'CButtonColumn',

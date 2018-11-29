@@ -51,7 +51,6 @@ echo '<ul class="breadcrumbs">
 
 <?php echo CHtml::form() ?>
 	<style type="text/css">
-		span {cursor:pointer; }
 		.minus, .plus{
 			width:10px;
 			height:10px;
@@ -59,6 +58,7 @@ echo '<ul class="breadcrumbs">
 			border-radius:4px;
 			padding:3px 5px 3px 5px;
 			border:1px solid #ddd;
+			cursor:pointer;
 		}
 		input{
 			height:24px;
