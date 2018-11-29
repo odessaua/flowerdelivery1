@@ -66,6 +66,215 @@ echo '<ul class="breadcrumbs">
 			border-radius:4px;
 			padding:0 2px;
 		}
+/* tooltip */
+
+
+.tool-tip{
+	color: #fff;
+	background-color: rgba( 0, 0, 0, .7);
+	text-shadow: none;
+	font-size: 14px;
+	visibility: hidden;
+	-webkit-border-radius: 7px; 
+	-moz-border-radius: 7px; 
+	-o-border-radius: 7px; 
+	border-radius: 7px;	
+	text-align: center;	
+	opacity: 0;
+	z-index: 999;
+	padding: 6px 8px;	
+	position: absolute;
+	cursor: default;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;	
+}
+
+.tool-tip,
+.tool-tip.top{
+	top: auto;
+	bottom: 114%;
+	left: 20%;		
+}
+
+.tool-tip.top:after,
+.tool-tip:after{
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
+	margin-left: -7px;
+	content: ' ';
+	height: 0px;
+	width: 0px;
+	border: 6px solid transparent;
+    border-top-color: rgba( 0, 0, 0, .7);	
+}
+
+/* default heights, width and margin w/o Javscript */
+
+.tool-tip,
+.tool-tip.top{
+	width: 210px;
+	height: 35px;
+	margin-left: -43px;
+}
+
+/* tool tip position right */
+
+.tool-tip.right{
+	top: 50%;
+	right: auto;
+	left: 106%;
+	margin-top: -15px;
+	margin-right: auto;	
+	margin-left: auto;
+}
+
+.tool-tip.right:after{
+	left: -5px;
+	top: 50%;	
+	margin-top: -6px;
+	bottom: auto;
+	border-top-color: transparent;	
+    border-right-color: rgba( 0, 0, 0, .7);	
+}
+
+/* tool tip position left */
+
+.tool-tip.left{
+	top: 50%;
+	left: auto;
+	right: 105%;
+	margin-top: -15px;	
+	margin-left: auto;	
+}
+
+.tool-tip.left:after{
+	left: auto;
+	right: -12px;
+	top: 50%;
+	margin-top: -6px;
+	bottom: auto;
+	border-top-color: transparent;	
+    border-left-color: rgba( 0, 0, 0, .7);	
+}
+
+/* tool tip position bottom */
+
+.tool-tip.bottom{
+	top: 115%;
+	bottom: auto;
+	left: 50%;
+	margin-bottom: auto;	
+}
+
+.tool-tip.bottom:after{
+	position: absolute;
+	top: -12px;
+	left: 50%;
+	margin-left: -7px;
+	content: ' ';
+	height: 0px;
+	width: 0px;
+	border: 6px solid transparent;
+    border-top-color: transparent;	
+    border-bottom-color: rgba( 0, 0, 0, .6);	
+}
+
+/* tooltip on focus left and right */
+
+.on-focus .tool-tip.left,
+.on-focus .tool-tip.right{
+	margin-top: -19px;
+}
+
+/* on hover of element containing tooltip default*/
+
+*:not(.on-focus):hover > .tool-tip,
+.on-focus input:focus + .tool-tip{
+	visibility: visible;
+	opacity: 1;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;		
+}
+
+
+/* tool tip slide out */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+.on-focus > .tool-tip{
+	display: block;
+}
+
+.on-focus > .tool-tip.slideIn{
+	z-index: -1;
+}
+
+.on-focus > input:focus + .tool-tip.slideIn{
+	z-index: 1;
+}
+
+/* bottom slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn.bottom,
+.on-focus > .tool-tip.slideIn.bottom{
+	top: 50%;	
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn.bottom,
+.on-focus > input:focus + .tool-tip.slideIn.bottom{
+	top: 115%;
+}	
+
+.on-focus > input:focus + .tool-tip.slideIn.bottom{
+	top: 100%;
+}
+
+/* top slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+*:not(.on-focus) > .tool-tip.slideIn.top,
+.on-focus > .tool-tip.slideIn,
+.on-focus > .tool-tip.slideIn.top{
+	bottom: 50%;
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn,
+*:not(.on-focus):hover > .tool-tip.slideIn.top,
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > input:focus + .tool-tip.slideIn.top{
+	bottom: 110%;
+}	
+
+/* left slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn.left,
+.on-focus > .tool-tip.slideIn.left{
+	right: 50%;	
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn.left,
+.on-focus > input:focus + .tool-tip.slideIn.left{
+	right: 105%;		
+}
+
+/* right slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn.right,
+.on-focus > .tool-tip.slideIn.right{
+	left: 50%;		
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn.right,
+.on-focus > input:focus + .tool-tip.slideIn.right{
+	left: 105%;
+}
+
 	</style>
 	<script type="text/javascript" >
 		$(document).ready(function() {
@@ -135,9 +344,17 @@ echo '<ul class="breadcrumbs">
                        
 				<b style="float: left; margin-bottom: 10px;" class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></b><br>
 				<div style="float: left; margin-bottom: 40px; display: flex;margin: 4px 10px 0 -44px;vertical-align: top;">
-                    
-                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-                    <?php echo CHtml::error($this->form,'coupon'); ?>
+                    <?php if(Yii::app()->user->isGuest){?>
+						<div class="on-focus clearfix" style="position: relative; padding: 0px; margin: 0px auto; display: table; float: left">
+							<?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+						<?php echo CHtml::error($this->form,'coupon'); ?>
+							<div class="tool-tip slideIn top"><?=Yii::t('OrdersModule.core','To use the gift coupon, please register on the service.')?></div>
+						</div>
+						
+					<?php }else{?>
+						<?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+						<?php echo CHtml::error($this->form,'coupon'); ?>
+					<?php }?>
 					<input disabled style="margin-top: -3px; margin-left: 13px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Apply')?>"/>
 				<button disabled style="background-color: #999;clear: both; margin-top: -3px; margin-left: 112px;" class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Update Cart')?></button>
                 </div>
