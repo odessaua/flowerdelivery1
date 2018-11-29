@@ -130,36 +130,44 @@ echo '<ul class="breadcrumbs">
                 </tr>
                 </thead>
                 <tfoot>
-                <tr>
+                <tr style="border-bottom: 0px solid #f6f6f6;">
                 <td colspan="6">
-                        <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?>
+                       
+				<b style="float: left; margin-bottom: 10px;" class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></b><br>
+				<div style="float: left; margin-bottom: 40px; display: flex;margin: 4px 10px 0 -44px;vertical-align: top;">
+                    
+                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
+                    <?php echo CHtml::error($this->form,'coupon'); ?>
+					<input disabled style="margin-top: -3px; margin-left: 13px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Apply')?>"/>
+				<button disabled style="background-color: #999;clear: both; margin-top: -3px; margin-left: 112px;" class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Update Cart')?></button>
+                </div>
+				<div class="total" style="margin-top: 64px; margin-bottom: 25px;margin-right: 43px;">
                             <span class="price" id="total">
 							<?php if(!Yii::app()->user->isGuest){
 								$regular_discount = DiscountRegular::checkDiscount($totalPrice);
 							}
 							if($regular_discount != false){
+								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:&nbsp;&nbsp;&nbsp;&nbsp;').'</b>';
 								echo '<b id="price_res">'.StoreProduct::formatPrice($regular_discount['result'], true). '</b>';
-								echo '<b style="float: left;margin-right: 20px;color: #6b716c; text-decoration:line-through">' .StoreProduct::formatPrice($totalPrice, true). '</b>';
+								echo '&nbsp;&nbsp;<b style="margin-right: 20px;color: #6b716c; text-decoration:line-through">' .StoreProduct::formatPrice($totalPrice, true). '</b>';
 							}else{
+								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:').'</b>';
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
-				<div style="float: left; margin-bottom: 40px; display: inline-block;margin: -4px 10px 0 0;vertical-align: top;">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></span>
-                    <?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-                    <?php echo CHtml::error($this->form,'coupon'); ?>
-                </div>
-				<input disabled style="margin-top: 10px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Recalculate')?>"/>
-				<br>
+				
+				
 				<div style="clear: both;">
-                        <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
-						<input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
+				<input style="float:right;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
                 </div>
+				<div style="border-bottom: 3px solid #f6f6f6;margin-top: -93px;"></div>
 				</td>
-				
                 </tr>
-				
                 </tfoot>
+				
+				<tfoot>
+				</tfoot>
+				 
                 <tbody>
                 <?php foreach($items as $index=>$product): ?>
 				
@@ -225,16 +233,22 @@ echo '<ul class="breadcrumbs">
 
 				<?php if($regular_discount != false){?>
 				<tr class="price">
-                    <td colspan="3"style="text-align: left;">
-						<?php echo '<br>'.Yii::t('OrdersModule.core','Your discount is: ').''. $regular_discount['percent'] .'%';?>
+					<td style="text-align: left;">
+						<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
+                    </td>
+                    <td colspan="2"style="text-align: left;">
+						<?php echo '<div style="margin-left: -296px;text-align: center;"><div style="font-weight: 100; color: #7a1c4a;text-decoration: none;font-family: "PT Sans", sans-serif;font-size: 14px;">'.Yii::t('OrdersModule.core','Your Discount<p>').'</div>'. $regular_discount['percent'] .'% OFF </div>';?>
                     </td>
 					<td>
 						<?php echo '-'.StoreProduct::formatPrice($regular_discount['minus'], true);?>
                     </td>
                 </tr>
 				<tr class="price" id="mess_dis" style="display: none;">
-                    <td colspan="3"style="text-align: left;">
-						<?php echo '' .Yii::t('OrdersModule.core','Your promo discount is: &nbsp;');?><div style="display: -webkit-inline-box;" id="discount_mess"></div>%
+					<td style="text-align: left;">
+						<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
+                    </td>
+                    <td colspan="2"style="text-align: left;">
+						<?php echo '<div style="margin-left: -296px;text-align: center;"><div style="font-weight: 100; color: #7a1c4a;text-decoration: none;font-family: "PT Sans", sans-serif;font-size: 14px;">' .Yii::t('OrdersModule.core','Your promo discount<p>');?></div><div style="display: -webkit-inline-box;" id="discount_mess"></div>
                     </td>
 					<td>
 						<div id="minus"></div>
@@ -434,7 +448,7 @@ $(document).ready(function(){
     <?php else:?>
     
     $("#step2").hide();
-    $(".recount").hide();
+    //$(".recount").hide();
     
     <?php endif;?>
     
@@ -459,13 +473,17 @@ $(document).ready(function(){
     });
     $(".plus").click(function(e){
         e.preventDefault();
-		$(".btntostep2").hide();
-        $(".recount").show();
+		$(".recount").prop('disabled', false);
+		$(".recount").css('background-color', '#45ae5b');
+		//$(".btntostep2").hide();
+        //$(".recount").show();
     });
 	$(".minus").click(function(e){
         e.preventDefault();
-        $(".btntostep2").hide();
-        $(".recount").show();
+		$(".recount").prop('disabled', false);
+		$(".recount").css('background-color', '#45ae5b');
+        //$(".btntostep2").hide();
+        //$(".recount").show();
         //location.reload();
         
     });
@@ -496,7 +514,7 @@ $(document).ready(function(){
 			var trimmed = response.substring(1);
 			if(trimmed != '0.00'){
 				$("#price_res").text(returnedData['price']);
-				$("#discount_mess").text(returnedData['percent']);
+				$("#discount_mess").text(returnedData['percent']+'% OFF');
 				$("#minus").text('-'+returnedData['minus']);
 				$("#mess_dis").css({"display": "table-row"});
 				$("#goStep3").prop('disabled', true);
