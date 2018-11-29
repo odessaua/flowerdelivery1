@@ -131,7 +131,7 @@ echo '<ul class="breadcrumbs">
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="6">
+                <td colspan="6">
                         <div class="total"><?php echo Yii::t('OrdersModule.core','Total')?>
                             <span class="price" id="total">
 							<?php if(!Yii::app()->user->isGuest){
@@ -154,8 +154,9 @@ echo '<ul class="breadcrumbs">
 				<div style="clear: both;">
                         <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
 						<input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
-                    </td>
-				</div>
+                </div>
+				</td>
+				
                 </tr>
 				
                 </tfoot>
