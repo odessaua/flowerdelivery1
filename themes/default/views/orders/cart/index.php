@@ -274,6 +274,15 @@ echo '<ul class="breadcrumbs">
 .on-focus > input:focus + .tool-tip.slideIn.right{
 	left: 105%;
 }
+#mess{
+	display: none;
+	position: absolute;
+    border: 1px solid;
+    margin: 42px 0px;
+    padding: 2px 4px 3px 5px;
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
 
 	</style>
 	<script type="text/javascript" >
@@ -352,6 +361,7 @@ echo '<ul class="breadcrumbs">
 						</div>
 						
 					<?php }else{?>
+						<div id="mess"></div>
 						<?php echo CHtml::activeTextField($this->form,'coupon'); ?>
 						<?php echo CHtml::error($this->form,'coupon'); ?>
 					<?php }?>
@@ -731,13 +741,19 @@ $(document).ready(function(){
 			var returnedData = JSON.parse(response);
 			var trimmed = response.substring(1);
 			if(trimmed != '0.00'){
-				$("#price_res").text(returnedData['price']);
-				$("#discount_mess").text(returnedData['percent']+'% OFF');
-				$("#minus").text('-'+returnedData['minus']);
-				$("#mess_dis").css({"display": "table-row"});
-				$("#goStep3").prop('disabled', true);
-				//$("#OrderCreateForm_coupon").prop('disabled', true);
-				//history.pushState(null, null, '/cart?code='+code);
+				if(returnedData['percent'] == null){
+					$("#mess").show();
+					$("#mess").text("Sorry, this coupon code is invalid or has expired");
+				}else{
+					$("#mess").hide();
+					$("#price_res").text(returnedData['price']);
+					$("#discount_mess").text(returnedData['percent']+'% OFF');
+					$("#minus").text('-'+returnedData['minus']);
+					$("#mess_dis").css({"display": "table-row"});
+					$("#goStep3").prop('disabled', true);
+					//$("#OrderCreateForm_coupon").prop('disabled', true);
+					//history.pushState(null, null, '/cart?code='+code);
+				}
 			}else{
 				console.log('error');
 			}

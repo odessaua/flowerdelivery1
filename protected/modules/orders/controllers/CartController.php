@@ -46,6 +46,7 @@ class CartController extends Controller
 		$rate =Yii::app()->currency->active->rate;
 		
 		$discount = Promo::getPromoDiscount($total_price*$rate, $code);
+		
 		$data = [
 			'price' => StoreProduct::formatPrice((string)$discount['result'], true),
 			'percent' => $discount['percent'],
