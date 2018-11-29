@@ -155,7 +155,7 @@ echo '<ul class="breadcrumbs">
                         <button class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Recalculate')?></button>
 						<input class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Order')?>"/>
                     </td>
-
+				</div>
                 </tr>
 				
                 </tfoot>
