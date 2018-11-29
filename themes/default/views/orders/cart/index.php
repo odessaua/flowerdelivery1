@@ -141,7 +141,8 @@ echo '<ul class="breadcrumbs">
 					<input disabled style="margin-top: -3px; margin-left: 13px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Apply')?>"/>
 				<button disabled style="background-color: #999;clear: both; margin-top: -3px; margin-left: 112px;" class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Update Cart')?></button>
                 </div>
-				<div class="total" style="margin-top: 64px; margin-bottom: 25px;margin-right: 43px;">
+				<div style="border-bottom: 3px solid #f6f6f6;margin-top: 0px;padding-top: 75px;"></div>
+				<div class="total" style="margin-top: 20px; margin-bottom: 25px;float: left;margin-left: 745px;">
                             <span class="price" id="total">
 							<?php if(!Yii::app()->user->isGuest){
 								$regular_discount = DiscountRegular::checkDiscount($totalPrice);
@@ -151,7 +152,7 @@ echo '<ul class="breadcrumbs">
 								echo '<b id="price_res">'.StoreProduct::formatPrice($regular_discount['result'], true). '</b>';
 								echo '&nbsp;&nbsp;<b style="margin-right: 20px;color: #6b716c; text-decoration:line-through">' .StoreProduct::formatPrice($totalPrice, true). '</b>';
 							}else{
-								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:').'</b>';
+								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:&nbsp;&nbsp;&nbsp;&nbsp;').'</b>';
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
@@ -160,7 +161,7 @@ echo '<ul class="breadcrumbs">
 				<div style="clear: both;">
 				<input style="float:right;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
                 </div>
-				<div style="border-bottom: 3px solid #f6f6f6;margin-top: -93px;"></div>
+				
 				</td>
                 </tr>
                 </tfoot>
