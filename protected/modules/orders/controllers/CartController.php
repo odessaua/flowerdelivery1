@@ -75,9 +75,8 @@ class CartController extends Controller
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
 				$price = $_POST['price'];
-
-				$discount = urldecode((string)$price);
-				$matn = mb_substr($price,1);
+				Yii::app()->request->cookies['price'] = new CHttpCookie('price', $price);
+				
 				if(isset($_POST['OrderCreateForm']))
 				{
 					$this->form->attributes = $_POST['OrderCreateForm'];
@@ -87,7 +86,7 @@ class CartController extends Controller
 						$order = $this->createOrder();
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
-						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key, 'price'=>$matn)));
+						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key)));
 					}
 					
 				}
@@ -167,8 +166,6 @@ class CartController extends Controller
 		$total_price = $model->total_price;
 
 		$rates =Yii::app()->currency->active->rate;
-
-		$discount = Promo::getPromoDiscount($total_price, $code);
 		
 		if(!$model)
 			throw new CHttpException(404, Yii::t('OrdersModule.core', 'Error. Order not found'));
@@ -180,12 +177,14 @@ class CartController extends Controller
 		// if(!empty($model->doPhoto)){$model->photo_price=$photoPrice;}
 		// if(!empty($model->do_card)){$model->card_price=$cardPrice;}
 		// if(!empty($model->card_transl)){$model->transl_price=$translPrice;}
+		$price = Yii::app()->request->cookies['price']->value;
+		$price = mb_substr($price,1);
 		$model->update();
 		$this->render('view', array(
 			'model'=>$model,
 			'rate'=>$rate,
 			'symbol'=>$symbol,
-			'discount'=>$discount
+			'price'=>$price
 		));
 	}
 	public function actionSuccess(){

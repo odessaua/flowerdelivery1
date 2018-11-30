@@ -5,7 +5,7 @@
  */
 
 $rate =Yii::app()->currency->active->rate; // курс текущей валюты к USD
-$discount_price = $_GET['price'];
+$discount_price = $price;
 
 if(!empty($discount_price)){
 	$uah_full_price = $discount_price;
