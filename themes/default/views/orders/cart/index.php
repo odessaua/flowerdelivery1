@@ -384,7 +384,7 @@ echo '<ul class="breadcrumbs">
 							}?> </span>
                         </div>
 				
-				
+				<input type="hidden" id="hidden_price" name="price" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
 				<div style="clear: both;">
 				<input style="float:right;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
                 </div>
@@ -651,7 +651,7 @@ echo '<ul class="breadcrumbs">
                     <?php echo CHtml::error($this->form,'phone'); ?>
                 </div>  
             </div>
-			<input type="hidden" id="hidden_price" name="price" value="">
+			<input type="hidden" id="hidden_price" name="price" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
 			<?php if($regular_discount != false){?>
 			<input type="hidden" id="discount_price" name="discount" value="<?php echo $regular_discount['percent'];?>">
 			<input type="hidden" id="discount_price" name="discount_minus" value="<?php echo $regular_discount['minus'];?>">
