@@ -383,8 +383,9 @@ echo '<ul class="breadcrumbs">
 								echo StoreProduct::formatPrice($totalPrice, true);
 							}?> </span>
                         </div>
-				
+				<?php if(Yii::app()->user->isGuest){?>
 				<input type="hidden" id="hidden_price" name="price" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
+				<?php }?>
 				<div style="clear: both;">
 				<input style="float:right;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
                 </div>
