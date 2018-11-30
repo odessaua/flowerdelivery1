@@ -76,7 +76,7 @@ class Order extends BaseModel
 			array('paid', 'boolean'),
 			array('image', 'file', 'types'=>'png, jpg, jpeg, gif', 'allowEmpty' => true),
 			// Search
-			array('id, user_id, payment_id, payment_status, delivery_price, total_price, status_id, paid, user_name, user_email, user_address, user_phone, user_comment, receiver_city, datetime_del, ip_address, created, updated, lang, admin_id', 'safe', 'on'=>'search'),
+			array('id, user_id, payment_id, payment_status, delivery_price, total_price, status_id, paid, user_name, user_email, user_address, user_phone, user_comment, receiver_city, datetime_del, ip_address, created, updated, lang, admin_id, discount_minus_promo, discount_promo, discount_minus', 'safe', 'on'=>'search'),
 		);
 	}
 

@@ -652,6 +652,11 @@ echo '<ul class="breadcrumbs">
                 </div>  
             </div>
 			<input type="hidden" id="hidden_price" name="price" value="">
+			<?php if($regular_discount != false){?>
+			<input type="hidden" id="discount_price" name="discount" value="<?php echo $regular_discount['percent'];?>">
+			<input type="hidden" id="discount_price" name="discount_minus" value="<?php echo $regular_discount['minus'];?>">
+			<?php }?>
+			
             <!-- data-form (end) -->
             <div class="links">
                 <a class="link-prev" href="#" title="" id="backToStep1"><?=Yii::t('OrdersModule.core','Back')?></a>
@@ -659,6 +664,8 @@ echo '<ul class="breadcrumbs">
             </div>
     </div>
 </div>
+<input type="hidden" id="discount_promo" name="discount_promo" value="">
+			<input type="hidden" id="discount_minus_promo" name="discount_minus_promo" value="">
 <?php echo CHtml::endForm() ?>
 
 <!-- related-products (begin) -->
@@ -745,6 +752,9 @@ $(document).ready(function(){
 					$("#mess").show();
 					$("#mess").text("Sorry, this coupon code is invalid or has expired");
 				}else{
+					console.log(returnedData['minus'].substring(1));
+					$("#discount_minus_promo").val(returnedData['minus'].substring(1));
+					$("#discount_promo").val(returnedData['percent']);
 					$("#mess").hide();
 					$("#price_res").text(returnedData['price']);
 					$("#discount_mess").text(returnedData['percent']+'% OFF');

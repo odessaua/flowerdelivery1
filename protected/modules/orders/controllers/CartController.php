@@ -77,13 +77,19 @@ class CartController extends Controller
 				$price = $_POST['price'];
 				$price = mb_substr($price,1);
 				
+				$discount = $_POST['discount'];
+				$discount_minus = $_POST['discount_minus'];
+				
+				$discount_promo = $_POST['discount_promo'];
+				$discount_minus_promo = $_POST['discount_minus_promo'];
+				
 				if(isset($_POST['OrderCreateForm']))
 				{
 					$this->form->attributes = $_POST['OrderCreateForm'];
 					$city=Yii::app()->session['_city'];
 					if($this->form->validate())
 					{
-						$order = $this->createOrder($price);
+						$order = $this->createOrder($price, $discount, $discount_minus, $discount_promo, $discount_minus_promo);
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
 						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key)));
@@ -164,6 +170,10 @@ class CartController extends Controller
 		$symbol=Yii::app()->currency->active['symbol'];
 		
 		$price = $model->total_price;
+		$discount = $model->discount;
+		$discount_minus = $model->discount_minus;
+		$discount_promo = $model->discount_promo;
+		$discount_minus_promo = $model->discount_minus_promo;
 
 		$rates =Yii::app()->currency->active->rate;
 		
@@ -183,7 +193,11 @@ class CartController extends Controller
 			'model'=>$model,
 			'rate'=>$rate,
 			'symbol'=>$symbol,
-			'price'=>$price
+			'price'=>$price,
+			'discount'=>$discount,
+			'discount_minus'=>$discount_minus,
+			'discount_promo'=>$discount_promo,
+			'discount_minus_promo'=>$discount_minus_promo
 		));
 	}
 	public function actionSuccess(){
@@ -365,7 +379,7 @@ class CartController extends Controller
 	 * @return Order
 	 */
 
-	public function createOrder($price)
+	public function createOrder($price, $discount, $discount_minus, $discount_promo, $discount_minus_promo)
 	{
 		if(Yii::app()->cart->countItems() == 0)
 			return false;
@@ -389,6 +403,10 @@ class CartController extends Controller
 		$order->country = $this->form->country;
 		$order->city = $this->form->city;
 		$order->total_price = $price;
+		$order->discount = $discount;
+		$order->discount_minus = $discount_minus;
+		$order->discount_promo = $discount_promo;
+		$order->discount_minus_promo = $discount_minus_promo;
 		$order->user_email   = $this->form->email;
 		$order->user_phone   = $this->form->phone;
 		$order->user_address = $this->form->address;
