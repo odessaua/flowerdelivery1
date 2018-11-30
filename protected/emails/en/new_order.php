@@ -25,6 +25,7 @@
     <p>
       <b>Total:</b>
       <?=Yii::app()->currency->main->symbol?><?=StoreProduct::formatPrice($order->total_price + $order->delivery_price)?> <?=Yii::app()->currency->main->iso?>
+	  Total with allowance for discounts: <?php echo $price;?>
     </p>
 
     <p>

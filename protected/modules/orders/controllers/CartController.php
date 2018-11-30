@@ -75,7 +75,7 @@ class CartController extends Controller
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
 				$price = $_POST['price'];
-				Yii::app()->request->cookies['price'] = new CHttpCookie('price', $price);
+				$price = mb_substr($price,1);
 				
 				if(isset($_POST['OrderCreateForm']))
 				{
@@ -83,7 +83,7 @@ class CartController extends Controller
 					$city=Yii::app()->session['_city'];
 					if($this->form->validate())
 					{
-						$order = $this->createOrder();
+						$order = $this->createOrder($price);
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
 						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key)));
@@ -163,7 +163,7 @@ class CartController extends Controller
 							     ->queryRow()['rate'];
 		$symbol=Yii::app()->currency->active['symbol'];
 		
-		$total_price = $model->total_price;
+		$price = $model->total_price;
 
 		$rates =Yii::app()->currency->active->rate;
 		
@@ -177,8 +177,7 @@ class CartController extends Controller
 		// if(!empty($model->doPhoto)){$model->photo_price=$photoPrice;}
 		// if(!empty($model->do_card)){$model->card_price=$cardPrice;}
 		// if(!empty($model->card_transl)){$model->transl_price=$translPrice;}
-		$price = Yii::app()->request->cookies['price']->value;
-		$price = mb_substr($price,1);
+
 		$model->update();
 		$this->render('view', array(
 			'model'=>$model,
@@ -366,7 +365,7 @@ class CartController extends Controller
 	 * @return Order
 	 */
 
-	public function createOrder()
+	public function createOrder($price)
 	{
 		if(Yii::app()->cart->countItems() == 0)
 			return false;
@@ -389,6 +388,7 @@ class CartController extends Controller
 		$order->payment_status = 'new'; // для всех новых заказов – одинаковый статус
 		$order->country = $this->form->country;
 		$order->city = $this->form->city;
+		$order->total_price = $price;
 		$order->user_email   = $this->form->email;
 		$order->user_phone   = $this->form->phone;
 		$order->user_address = $this->form->address;
@@ -475,7 +475,7 @@ class CartController extends Controller
 		$order->updateDeliveryPrice();
 
 		// Send email to user.
-		$this->sendEmail($order);
+		$this->sendEmail($order, $price);
 		if(empty(Yii::app()->params['is_local'])) {
             $this->sendEmailAdmin($order, Yii::app()->params['adminEmail']);
             $this->sendEmailAdmin($order, '7roses.office@gmail.com');
@@ -543,7 +543,7 @@ class CartController extends Controller
 	/**
 	 * Sends email to user after create new order.
 	 */
-	private function sendEmail(Order $order)
+	private function sendEmail(Order $order, $price)
 	{
 		$theme=Yii::t('OrdersModule.core', 'Your order #').$order->id;
 
@@ -553,7 +553,7 @@ class CartController extends Controller
 		// If template file does not exists use default russian translation
 		if(!file_exists($emailBodyFile))
 			$emailBodyFile=Yii::getPathOfAlias("application.emails.ru").DIRECTORY_SEPARATOR.'new_order.php';
-		$body = $this->renderFile($emailBodyFile, array('order'=>$order), true);
+		$body = $this->renderFile($emailBodyFile, array('order'=>$order, 'price'=>$price), true);
 
 		$mailer           = Yii::app()->mail;
 		// $mailer->IsSMTP();

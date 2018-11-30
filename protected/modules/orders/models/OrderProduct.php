@@ -79,7 +79,7 @@ class OrderProduct extends BaseModel
 	 */
 	public function afterSave()
 	{
-		$this->order->updateTotalPrice();
+		//$this->order->updateTotalPrice();
 		$this->order->updateDeliveryPrice();
 
 		if($this->isNewRecord)
