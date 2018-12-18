@@ -168,25 +168,28 @@ class CartController extends Controller
 							     ->where('id=2')
 							     ->queryRow()['rate'];
 		$symbol=Yii::app()->currency->active['symbol'];
+
+		if($model->doPhoto == 1){
+			$photoPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>17))['price'];
+		}
+		if($model->do_card == 1){
+			$cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
+		}
+		if($model->card_transl == 1){
+			$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
+		}
 		
-		$price = $model->total_price;
 		$discount = $model->discount;
 		$discount_minus = $model->discount_minus;
 		$discount_promo = $model->discount_promo;
 		$discount_minus_promo = $model->discount_minus_promo;
-
+		
+		$price = $model->total_price + $translPrice + $cardPrice + $photoPrice + $model->delivery_price;
+		
 		$rates =Yii::app()->currency->active->rate;
 		
 		if(!$model)
 			throw new CHttpException(404, Yii::t('OrdersModule.core', 'Error. Order not found'));
-		
-		// $photoPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>17))['price'];
-		// $cardPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>18))['price'];
-		// $translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
-		
-		// if(!empty($model->doPhoto)){$model->photo_price=$photoPrice;}
-		// if(!empty($model->do_card)){$model->card_price=$cardPrice;}
-		// if(!empty($model->card_transl)){$model->transl_price=$translPrice;}
 
 		$model->update();
 		$this->render('view', array(
@@ -396,6 +399,7 @@ class CartController extends Controller
 		$lang= Yii::app()->language;
                     if($lang == 'ua')
                         $lang = 'uk';
+					
 		// Set main data
 		$order->user_id      = Yii::app()->user->isGuest ? null : Yii::app()->user->id;
 		$order->user_name    = $this->form->name;

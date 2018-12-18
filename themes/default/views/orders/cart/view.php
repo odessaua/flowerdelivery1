@@ -332,14 +332,14 @@ $wfp_p_names = $wfp_p_qtys = $wfp_p_prices = array(); // инфа для WayForP
 			<tr><td width="40px" align="center"><img src="/uploads/mark.png" alt="Delivery feeDelivery fee" title="Delivery fee" width=24 height=24 /></td>
 			<td><div class="carttext"><?echo Yii::t('OrdersModule.core','Your promo discount: ');?><?php echo $discount_promo."%"?></div></td>		
 			<td width="25%"><span class="price">-<?php echo StoreProduct::formatPrice($discount_minus_promo, true);?></span></td></tr>
-			<?php }else{?>
+			<?php }?>
 			<tr>
 			<td width="40px" align="center"><img src="/uploads/sum.png" alt="Total sum" title="Total sum" width=24 height=24 /></td>
 			<td><span class="total"><?php echo Yii::t('OrdersModule.core','Order Total');?></span></td>
-			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($price*$rate+$cardPrice+$model->photo_price, true)."</span> " ;?></div>
+			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($price*$rate, true)."</span> " ;?></div>
 
 			</td></tr>
-			<?php }?>
+
 			</table>
 			</div>
         </td>

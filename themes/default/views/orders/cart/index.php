@@ -726,7 +726,6 @@ $(document).ready(function(){
 
 	$("#OrderCreateForm_coupon").on('input', function () {
 		$("#goStep3").prop('disabled', false);
-		
     });
 	
 	$("#goStep3").click(function(e){
