@@ -381,6 +381,7 @@ echo '<ul class="breadcrumbs">
 							}else{
 								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:&nbsp;&nbsp;&nbsp;&nbsp;').'</b>';
 								echo StoreProduct::formatPrice($totalPrice, true);
+								echo '<input type="hidden" id="hidden_price" name="price" value="'.StoreProduct::formatPrice($totalPrice, true).'">';
 							}?> </span>
                         </div>
 				<?php if(Yii::app()->user->isGuest){?>
@@ -652,10 +653,11 @@ echo '<ul class="breadcrumbs">
                     <?php echo CHtml::error($this->form,'phone'); ?>
                 </div>  
             </div>
-			<input type="hidden" id="hidden_price" name="price" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
+			
 			<?php if($regular_discount != false){?>
 			<input type="hidden" id="discount_price" name="discount" value="<?php echo $regular_discount['percent'];?>">
 			<input type="hidden" id="discount_price" name="discount_minus" value="<?php echo $regular_discount['minus'];?>">
+			<input type="hidden" id="new_order" name="new_order" value="true">
 			<?php }?>
 			
             <!-- data-form (end) -->
@@ -665,8 +667,10 @@ echo '<ul class="breadcrumbs">
             </div>
     </div>
 </div>
+
 <input type="hidden" id="discount_promo" name="discount_promo" value="">
 			<input type="hidden" id="discount_minus_promo" name="discount_minus_promo" value="">
+			<input type="hidden" id="hidden_price" name="price2" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
 <?php echo CHtml::endForm() ?>
 
 <!-- related-products (begin) -->

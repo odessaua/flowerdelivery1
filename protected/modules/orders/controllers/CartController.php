@@ -69,12 +69,12 @@ class CartController extends Controller
 		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('recount') && !empty($_POST['quantities']))
 			$this->processRecount();
 			$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
-	
+
 			$rate = Yii::app()->currency->active->rate;
 
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
-				$price = $_POST['price'];
+				$price = $_POST['price2'];
 				$price = mb_substr($price,1);
 
 				$discount = $_POST['discount'];
@@ -82,7 +82,8 @@ class CartController extends Controller
 				
 				$discount_promo = $_POST['discount_promo'];
 				$discount_minus_promo = $_POST['discount_minus_promo'];
-				
+/* 						var_dump($_POST);
+		die; */
 				if(isset($_POST['OrderCreateForm']))
 				{
 					$this->form->attributes = $_POST['OrderCreateForm'];
@@ -183,7 +184,7 @@ class CartController extends Controller
 		$discount_minus = $model->discount_minus;
 		$discount_promo = $model->discount_promo;
 		$discount_minus_promo = $model->discount_minus_promo;
-		
+
 		$price = $model->total_price + $translPrice + $cardPrice + $photoPrice + $model->delivery_price;
 		
 		$rates =Yii::app()->currency->active->rate;
