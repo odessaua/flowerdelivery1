@@ -218,31 +218,31 @@ echo '<ul class="breadcrumbs">
                 </tr>
                 <?php endforeach ?>
 
-				<?php if($regular_discount != false){?>
-				<tr class="price">
-					<td style="text-align: left;">
-						<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
-                    </td>
-                    <td colspan="2"style="text-align: left;">
-						<?php echo '<div style="margin-left: -296px;text-align: center;"><div style="font-weight: 100; color: #7a1c4a;text-decoration: none;font-family: "PT Sans", sans-serif;font-size: 14px;">'.Yii::t('OrdersModule.core','Your Discount<p>').'</div>'. $regular_discount['percent'] .'% OFF </div>';?>
-                    </td>
-					<td>
-						<?php echo '-'.StoreProduct::formatPrice($regular_discount['minus'], true);?>
-                    </td>
-                </tr>
-				<tr class="price" id="mess_dis" style="display: none;">
-					<td style="text-align: left;">
-						<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
-                    </td>
-                    <td colspan="2"style="text-align: left;">
-						<?php echo '<div style="margin-left: -296px;text-align: center;"><div style="font-weight: 100; color: #7a1c4a;text-decoration: none;font-family: "PT Sans", sans-serif;font-size: 14px;">' .Yii::t('OrdersModule.core','Your promo discount<p>');?></div><div style="display: -webkit-inline-box;" id="discount_mess"></div>
-                    </td>
-					<td>
-						<div id="minus"></div>
-                    </td>
-                </tr>
+				<?php if($regular_discount != false){
+					if ($regular_discount['percent']>0) { ?>
+		<tr><td>
+				<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
+                </td><td>
+				<?php echo'<div><a href="#">'.Yii::t('OrdersModule.core','Your Discount').'</a></div><div class="price">'. $regular_discount['percent'] .'% OFF </div>';?>
+                </td><td>
+		</td><td>
+				<?php echo '<div class="price">-'.StoreProduct::formatPrice($regular_discount['minus']*$rate, true).'</div>';?>
+                </td><td>
+		</td></tr>
+				<?php } else {?>
+				<tr id="mess_dis" style="display: none;">
+		<td>
+				<img style="width: 100px;" src="<?php echo Yii::app()->theme->baseUrl ?>/assets/img/discount.jpg" alt="7roses" />
+               </td><td>
+				<?php echo '<div><a href="#">' .Yii::t('OrdersModule.core','Your promo discount').'</a></div><div class="price" style="display: -webkit-inline-box;" id="discount_mess"></div>';?>
+               </td><td>
+		</td><td>
+				<div class="price"><div id="minus"></div></div>
+               </td><td>
+		</td></tr>
 				
-				<?php }?>
+		<?php }
+			}?>
                 </tbody>
             </table>
     </div>
