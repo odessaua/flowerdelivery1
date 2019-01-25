@@ -1821,6 +1821,10 @@ text-align: center;
   border-width: 7px 0 7px 9px;
   border-color: transparent transparent transparent #ffffff;
 }
+.req{
+   color: red;
+   margin-right: 3px;
+}
 /* data-form (end) */
 /* common blocks (end) */
 /* layout (begin) */
@@ -2665,11 +2669,14 @@ body:after {
   line-height: 40px;
 }
 .cart-table table .total {
-  float: right;
+  /*float: right;*/
+  text-align: right;
   font-size: 18px;
   line-height: 40px;
   height: 40px;
+  color:#777;
   font-weight: bold;
+  padding-right:30px;
 }
 .cart-table table .ctab-img {
   width: 85px;
@@ -2898,6 +2905,14 @@ body:after {
   color: #29a943;
 }
 
+#mess{
+	display: none;
+	position: absolute;
+    border: 1px solid;
+    margin: 42px 0px;
+    padding: 2px 4px 3px 5px;
+    color: #f00;
+}
 /* cart-page (end) */
 /* cooperation-page (begin) */
 .pre-data-form {
@@ -3008,8 +3023,7 @@ body:after {
   float:left;
 }
 .recount{
-  float:left;
-  margin-right:25px;
+  margin-left:0px;
   border:none;
 }
 .profileLink{
@@ -3404,4 +3418,64 @@ span.required{
 	}
 	li.hidden {
 	display: none;
+}
+/* Section Product View*/
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+.b-page-text section {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #f3cdf6;
+}
+.b-page-text input {
+  display: none;
+}
+
+.b-page-text label {
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #c99cb2;
+  border: 1px solid transparent;
+}
+
+.b-page-text label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+/*
+.b-page-text label[for*='1']:before { content: '\f1cb'; }
+.b-page-text label[for*='2']:before { content: '\f17d'; }
+.b-page-text label[for*='3']:before { content: '\f16c'; }
+.b-page-text label[for*='4']:before { content: '\f171'; }
+*/
+.b-page-text label:hover {
+  color: #9e4470;
+  cursor: pointer;
+}
+
+.b-page-text input:checked + label {
+  color: #a0066b;
+  border: 1px solid #f3cdf6;
+  border-top: 2px solid #a0066b;
+  border-bottom: 1px solid #fff;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+}
+
+@media screen and (max-width: 800px) {
+  .b-page-text label {
+    font-size: 0;
+  }
+  .b-page-text label:before {
+    margin: 0;
+    font-size: 18px;
+  }
 }
