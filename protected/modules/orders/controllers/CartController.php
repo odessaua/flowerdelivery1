@@ -45,12 +45,14 @@ class CartController extends Controller
 		}
 		$rate =Yii::app()->currency->active->rate;
 		
-		$discount = Promo::getPromoDiscount($total_price*$rate, $code);
+		$discount = Promo::getPromoDiscount($total_price, $code);
 		
 		$data = [
-			'price' => StoreProduct::formatPrice((string)$discount['result'], true),
+			'price' => $discount['result'], // сумма в usd
 			'percent' => $discount['percent'],
-			'minus' => StoreProduct::formatPrice((string)$discount['minus'], true),
+			'minus' => $discount['minus'], // скидка в usd
+			'minus_format'=> StoreProduct::formatPrice($discount['minus']*$rate, true), // отформатированная скидка
+			'price_format'=> StoreProduct::formatPrice($discount['result']*$rate, true), // отформатированная сумма
 		];
 		echo json_encode($data);
 	}
@@ -68,20 +70,15 @@ class CartController extends Controller
 		$translPrice=StoreDeliveryMethod::model()->findByAttributes(array('id'=>19))['price'];
 		if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('recount') && !empty($_POST['quantities']))
 			$this->processRecount();
-			$total_price = Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice());
-
-			$rate = Yii::app()->currency->active->rate;
 
 			if(Yii::app()->request->isPostRequest && Yii::app()->request->getPost('create'))
 			{
-				$price = $_POST['price2'];
-				$price = mb_substr($price,1);
-
-				$discount = $_POST['discount'];
-				$discount_minus = $_POST['discount_minus'];
+				$price = $_POST['order_price']; // сумма заказа в usd
+				$discount = $_POST['discount']; // процент накопительной  скидки
+				$discount_minus = $_POST['discount_minus']; // сумма накопительной скидки в usd
 				
-				$discount_promo = $_POST['discount_promo'];
-				$discount_minus_promo = $_POST['discount_minus_promo'];
+				$discount_promo = $_POST['discount_promo']; // процент промо  скидки
+				$discount_minus_promo = $_POST['discount_minus_promo']; // сумма промо скидки в usd
 /* 						var_dump($_POST);
 		die; */
 				if(isset($_POST['OrderCreateForm']))
@@ -93,6 +90,7 @@ class CartController extends Controller
 						$order = $this->createOrder($price, $discount, $discount_minus, $discount_promo, $discount_minus_promo);
 						Yii::app()->cart->clear();
 						$this->addFlashMessage(Yii::t('OrdersModule.core', 'Thank you. Your order is issued. Select a Payment Method.'));
+						Yii::app()->request->cookies['new_order'] = new CHttpCookie('new_order', 'true');
 						Yii::app()->request->redirect($this->createUrl('view', array('secret_key'=>$order->secret_key)));
 					}
 					
@@ -116,15 +114,15 @@ class CartController extends Controller
 		$this->render('index', array(
 			'items'           => $items,
 			'delivery_price'  => Yii::app()->session['_delivery_price'],
-			'totalPrice'      => Yii::app()->currency->convert(Yii::app()->cart->getTotalPrice()),
+			'totalPrice'      => Yii::app()->cart->getTotalPrice(),
 			'deliveryMethods' => $deliveryMethods,
-			'photoPrice'	=> $photoPrice,
+			'photoPrice'		=> $photoPrice,
 			'cardPrice'		=> $cardPrice,
-			'translPrice'	=> $translPrice,
+			'translPrice'		=> $translPrice,
 			'rate'			=> $rate,
 			'symbol'		=> $symbol,
-            'popular' 		=> $this->getMainPage(),
-			'discount'=>$discount
+            		'popular' 		=> $this->getMainPage(),
+			'discount'		=>$discount
 		));
 	}
 
@@ -192,16 +190,22 @@ class CartController extends Controller
 		if(!$model)
 			throw new CHttpException(404, Yii::t('OrdersModule.core', 'Error. Order not found'));
 
-		$model->update();
+		if(Yii::app()->request->cookies['new_order'] == true){
+			$model->total_price = $model->total_price + $translPrice + $cardPrice + $photoPrice + $model->delivery_price - $discount_minus_promo;
+			$model->update();
+			Yii::app()->request->cookies->clear();
+		}else{
+			$model->update();
+		}
 		$this->render('view', array(
-			'model'=>$model,
-			'rate'=>$rate,
-			'symbol'=>$symbol,
-			'price'=>$price,
-			'discount'=>$discount,
-			'discount_minus'=>$discount_minus,
-			'discount_promo'=>$discount_promo,
-			'discount_minus_promo'=>$discount_minus_promo
+			'model'			=>$model,
+			'rate'			=>$rate,
+			'symbol'		=>$symbol,
+			'price'			=>$price,
+			'discount'		=>$discount,
+			'discount_minus'	=>$discount_minus,
+			'discount_promo'	=>$discount_promo,
+			'discount_minus_promo'	=>$discount_minus_promo
 		));
 	}
 	public function actionSuccess(){
