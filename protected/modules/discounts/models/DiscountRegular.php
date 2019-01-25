@@ -117,6 +117,12 @@ class DiscountRegular extends BaseModel
 				];
 				return $data;
 			}
+				$data = [
+					'result' => $price,	// В случае если пользователь зарегистрирован, но у него пока нет накопительной скидки
+					'percent' => 0,		// он может воспользоваться купоном
+					'minus' => 0,
+					];
+				return $data;
 		}
 		
 	}
