@@ -6,13 +6,9 @@
 
 $rate =Yii::app()->currency->active->rate; // курс текущей валюты к USD
 $discount_price = $price;
-
-if(!empty($discount_price)){
-	$uah_full_price = $discount_price;
-}else{
-	$uah_full_price = Yii::app()->currency->convert($model->full_price, 2);
-}
+$uah_full_price = Yii::app()->currency->convert($model->total_price, 2); // полная стоимость заказа (товары + доставка) в UAH для платёжных систем Украины
 ?>
+
 <style>
 
 input[type=button], input[type=submit], input[type=reset], button, .button {
@@ -323,20 +319,20 @@ $wfp_p_names = $wfp_p_qtys = $wfp_p_prices = array(); // инфа для WayForP
 			
 			<?php if(!empty($discount)){ ?>
 			<tr>
-			<tr><td width="40px" align="center"><img src="/uploads/mark.png" alt="Delivery feeDelivery fee" title="Delivery fee" width=24 height=24 /></td>
+			<tr><td width="40px" align="center"><img src="/uploads/mark.png" alt="Regular Discount" title="Regular Discount" width=24 height=24 /></td>
 			<td><div class="carttext"><?echo Yii::t('OrdersModule.core','Your Discount: ');?>	<?php echo $discount."%"?></div></td>		
-			<td width="25%"><span class="price">-<?php echo StoreProduct::formatPrice($discount_minus, true);?></span></td></tr>
+			<td width="25%"><span class="price">-<?php echo StoreProduct::formatPrice($discount_minus*$rate, true);?></span></td></tr>
 			<?php }?>
 			<?php if(!empty($discount_promo)){ ?>
 			<tr>
-			<tr><td width="40px" align="center"><img src="/uploads/mark.png" alt="Delivery feeDelivery fee" title="Delivery fee" width=24 height=24 /></td>
+			<tr><td width="40px" align="center"><img src="/uploads/mark.png" alt="Promo discount" title="Promo discount" width=24 height=24 /></td>
 			<td><div class="carttext"><?echo Yii::t('OrdersModule.core','Your promo discount: ');?><?php echo $discount_promo."%"?></div></td>		
-			<td width="25%"><span class="price">-<?php echo StoreProduct::formatPrice($discount_minus_promo, true);?></span></td></tr>
+			<td width="25%"><span class="price">-<?php echo StoreProduct::formatPrice($discount_minus_promo*$rate, true);?></span></td></tr>
 			<?php }?>
 			<tr>
 			<td width="40px" align="center"><img src="/uploads/sum.png" alt="Total sum" title="Total sum" width=24 height=24 /></td>
 			<td><span class="total"><?php echo Yii::t('OrdersModule.core','Order Total');?></span></td>
-			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($price*$rate, true)."</span> " ;?></div>
+			<td width="25%"><div class="sum"><span class="price"><?echo StoreProduct::formatPrice($model->total_price*$rate*$rate, true)."</span> " ;?></div>
 
 			</td></tr>
 
