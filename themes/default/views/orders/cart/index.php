@@ -11,6 +11,9 @@ Yii::app()->clientScript->registerScriptFile($this->module->assetsUrl.'/cart.js'
 Yii::app()->clientScript->registerScript('cartScript', "var orderTotalPrice = '$totalPrice';", CClientScript::POS_HEAD);
 
 $this->pageTitle = Yii::t('OrdersModule.core', 'Checkout');
+$order_price = Yii::app()->cart->getTotalPrice();   // сумма заказа в usd 
+if(!Yii::app()->user->isGuest)
+$regular_discount = DiscountRegular::checkDiscount($order_price);  // массив сумма заказа и накопительная скидка в usd
 
 if(empty($items))
 {
@@ -50,241 +53,7 @@ echo '<ul class="breadcrumbs">
 ?>
 
 <?php echo CHtml::form() ?>
-	<style type="text/css">
-		.minus, .plus{
-			width:10px;
-			height:10px;
-			background:#f2f2f2;
-			border-radius:4px;
-			padding:3px 5px 3px 5px;
-			border:1px solid #ddd;
-			cursor:pointer;
-		}
-		input{
-			height:24px;
-			border:1px solid #ddd;
-			border-radius:4px;
-			padding:0 2px;
-		}
-/* tooltip */
-
-
-.tool-tip{
-	color: #fff;
-	background-color: rgba( 0, 0, 0, .7);
-	text-shadow: none;
-	font-size: 14px;
-	visibility: hidden;
-	-webkit-border-radius: 7px; 
-	-moz-border-radius: 7px; 
-	-o-border-radius: 7px; 
-	border-radius: 7px;	
-	text-align: center;	
-	opacity: 0;
-	z-index: 999;
-	padding: 6px 8px;	
-	position: absolute;
-	cursor: default;
-	-webkit-transition: all 240ms ease-in-out;
-	-moz-transition: all 240ms ease-in-out;
-	-ms-transition: all 240ms ease-in-out;
-	-o-transition: all 240ms ease-in-out;
-	transition: all 240ms ease-in-out;	
-}
-
-.tool-tip,
-.tool-tip.top{
-	top: auto;
-	bottom: 114%;
-	left: 20%;		
-}
-
-.tool-tip.top:after,
-.tool-tip:after{
-	position: absolute;
-	bottom: -12px;
-	left: 50%;
-	margin-left: -7px;
-	content: ' ';
-	height: 0px;
-	width: 0px;
-	border: 6px solid transparent;
-    border-top-color: rgba( 0, 0, 0, .7);	
-}
-
-/* default heights, width and margin w/o Javscript */
-
-.tool-tip,
-.tool-tip.top{
-	width: 210px;
-	height: 35px;
-	margin-left: -43px;
-}
-
-/* tool tip position right */
-
-.tool-tip.right{
-	top: 50%;
-	right: auto;
-	left: 106%;
-	margin-top: -15px;
-	margin-right: auto;	
-	margin-left: auto;
-}
-
-.tool-tip.right:after{
-	left: -5px;
-	top: 50%;	
-	margin-top: -6px;
-	bottom: auto;
-	border-top-color: transparent;	
-    border-right-color: rgba( 0, 0, 0, .7);	
-}
-
-/* tool tip position left */
-
-.tool-tip.left{
-	top: 50%;
-	left: auto;
-	right: 105%;
-	margin-top: -15px;	
-	margin-left: auto;	
-}
-
-.tool-tip.left:after{
-	left: auto;
-	right: -12px;
-	top: 50%;
-	margin-top: -6px;
-	bottom: auto;
-	border-top-color: transparent;	
-    border-left-color: rgba( 0, 0, 0, .7);	
-}
-
-/* tool tip position bottom */
-
-.tool-tip.bottom{
-	top: 115%;
-	bottom: auto;
-	left: 50%;
-	margin-bottom: auto;	
-}
-
-.tool-tip.bottom:after{
-	position: absolute;
-	top: -12px;
-	left: 50%;
-	margin-left: -7px;
-	content: ' ';
-	height: 0px;
-	width: 0px;
-	border: 6px solid transparent;
-    border-top-color: transparent;	
-    border-bottom-color: rgba( 0, 0, 0, .6);	
-}
-
-/* tooltip on focus left and right */
-
-.on-focus .tool-tip.left,
-.on-focus .tool-tip.right{
-	margin-top: -19px;
-}
-
-/* on hover of element containing tooltip default*/
-
-*:not(.on-focus):hover > .tool-tip,
-.on-focus input:focus + .tool-tip{
-	visibility: visible;
-	opacity: 1;
-	-webkit-transition: all 240ms ease-in-out;
-	-moz-transition: all 240ms ease-in-out;
-	-ms-transition: all 240ms ease-in-out;
-	-o-transition: all 240ms ease-in-out;
-	transition: all 240ms ease-in-out;		
-}
-
-
-/* tool tip slide out */
-
-*:not(.on-focus) > .tool-tip.slideIn,
-.on-focus > .tool-tip{
-	display: block;
-}
-
-.on-focus > .tool-tip.slideIn{
-	z-index: -1;
-}
-
-.on-focus > input:focus + .tool-tip.slideIn{
-	z-index: 1;
-}
-
-/* bottom slideIn */
-
-*:not(.on-focus) > .tool-tip.slideIn.bottom,
-.on-focus > .tool-tip.slideIn.bottom{
-	top: 50%;	
-}
-
-*:not(.on-focus):hover > .tool-tip.slideIn.bottom,
-.on-focus > input:focus + .tool-tip.slideIn.bottom{
-	top: 115%;
-}	
-
-.on-focus > input:focus + .tool-tip.slideIn.bottom{
-	top: 100%;
-}
-
-/* top slideIn */
-
-*:not(.on-focus) > .tool-tip.slideIn,
-*:not(.on-focus) > .tool-tip.slideIn.top,
-.on-focus > .tool-tip.slideIn,
-.on-focus > .tool-tip.slideIn.top{
-	bottom: 50%;
-}
-
-*:not(.on-focus):hover > .tool-tip.slideIn,
-*:not(.on-focus):hover > .tool-tip.slideIn.top,
-.on-focus > input:focus + .tool-tip.slideIn,
-.on-focus > input:focus + .tool-tip.slideIn.top{
-	bottom: 110%;
-}	
-
-/* left slideIn */
-
-*:not(.on-focus) > .tool-tip.slideIn.left,
-.on-focus > .tool-tip.slideIn.left{
-	right: 50%;	
-}
-
-*:not(.on-focus):hover > .tool-tip.slideIn.left,
-.on-focus > input:focus + .tool-tip.slideIn.left{
-	right: 105%;		
-}
-
-/* right slideIn */
-
-*:not(.on-focus) > .tool-tip.slideIn.right,
-.on-focus > .tool-tip.slideIn.right{
-	left: 50%;		
-}
-
-*:not(.on-focus):hover > .tool-tip.slideIn.right,
-.on-focus > input:focus + .tool-tip.slideIn.right{
-	left: 105%;
-}
-#mess{
-	display: none;
-	position: absolute;
-    border: 1px solid;
-    margin: 42px 0px;
-    padding: 2px 4px 3px 5px;
-    color: #9F6000;
-    background-color: #FEEFB3;
-}
-
-	</style>
+	
 	<script type="text/javascript" >
 		$(document).ready(function() {
 			$('.minus').click(function () {
@@ -348,56 +117,44 @@ echo '<ul class="breadcrumbs">
                 </tr>
                 </thead>
                 <tfoot>
-                <tr style="border-bottom: 0px solid #f6f6f6;">
-                <td colspan="6">
-                       
-				<b style="float: left; margin-bottom: 10px;" class="input-title"><?=Yii::t('OrdersModule.core','Coupon')?></b><br>
-				<div style="float: left; margin-bottom: 40px; display: flex;margin: 4px 10px 0 -44px;vertical-align: top;">
-                    <?php if(Yii::app()->user->isGuest){?>
-						<div class="on-focus clearfix" style="position: relative; padding: 0px; margin: 0px auto; display: table; float: left">
-							<?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-						<?php echo CHtml::error($this->form,'coupon'); ?>
-							<div class="tool-tip slideIn top"><?=Yii::t('OrdersModule.core','To use the gift coupon, please register on the service.')?></div>
-						</div>
-						
-					<?php }else{?>
-						<div id="mess"></div>
-						<?php echo CHtml::activeTextField($this->form,'coupon'); ?>
-						<?php echo CHtml::error($this->form,'coupon'); ?>
-					<?php }?>
-					<input disabled style="margin-top: -3px; margin-left: 13px;" class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Apply')?>"/>
-				<button disabled style="background-color: #999;clear: both; margin-top: -3px; margin-left: 112px;" class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Update Cart')?></button>
+                <tr>
+				  <td colspan="2">
+                    <div style="text-align: left; padding:40px 0px 0px;">   
+						<div class="tooltip" title="Gift Coupon">
+                        <div class="tip-info"><?php echo Yii::t('OrdersModule.core','Please register, to use gift coupon')?></div>
+                    </div>
+						<div style="display: inline-block; margin-left:5px;">
+							<div id="mess"></div>
+							<?php echo CHtml::activeTextField($this->form,'coupon', array('placeholder'=>Yii::t('OrdersModule.core','Enter Coupon or Promo code'))); ?>
+							<?php echo CHtml::error($this->form,'coupon'); ?>
+						</div>					
+					<div style="display: inline-block;"><input disabled class="btn-green btn-to-buy recoun2" id="goStep3" type="submit" value="<?php echo Yii::t('OrdersModule.core','Apply')?>"/></div>
+					</div>
+				</td>
+				<td>
+					<div style="display: inline-block; padding:40px 0px 0px;"><button disabled  style="background-color:#999;" class="btn-green btn-to-buy recount" name="recount" type="" value="1"><?php echo Yii::t('OrdersModule.core','Update Cart')?></button></div>
+                
+				</td>
+				<td colspan=2>
+				 <div class="total" id="total">
+                            
+							<?php if($regular_discount == true && $regular_discount['percent']>0){
+								
+								echo '<span style="font-weight:bold; margin-right:10px;">'.Yii::t('OrdersModule.core','Total Order').':</span>';
+								echo '<span  class="price" id="price_res">'.StoreProduct::formatPrice($regular_discount['result']*$rate, true).'</span>';
+								echo '<span style="text-decoration:line-through; padding:0 10px 0;">'.StoreProduct::formatPrice($totalPrice*$rate, true).'</span>';
+							}  else {
+
+								echo '<span style="font-weight:bold; margin-right:10px;">'.Yii::t('OrdersModule.core','Total Order').':</span>';
+								echo '<span  class="price">'.StoreProduct::formatPrice($totalPrice*$rate, true).'</span>';
+							}?>
                 </div>
-				<div style="border-bottom: 3px solid #f6f6f6;margin-top: 0px;padding-top: 75px;"></div>
-				<div class="total" style="margin-top: 20px; margin-bottom: 25px;float: left;margin-left: 745px;">
-                            <span class="price" id="total">
-							<?php if(!Yii::app()->user->isGuest){
-								$regular_discount = DiscountRegular::checkDiscount($totalPrice);
-							}
-							if($regular_discount != false){
-								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:&nbsp;&nbsp;&nbsp;&nbsp;').'</b>';
-								echo '<b id="price_res">'.StoreProduct::formatPrice($regular_discount['result'], true). '</b>';
-								echo '&nbsp;&nbsp;<b style="margin-right: 20px;color: #6b716c; text-decoration:line-through">' .StoreProduct::formatPrice($totalPrice, true). '</b>';
-							}else{
-								echo '<b style="color:#777">'.Yii::t('OrdersModule.core','Total Order:&nbsp;&nbsp;&nbsp;&nbsp;').'</b>';
-								echo StoreProduct::formatPrice($totalPrice, true);
-								echo '<input type="hidden" id="hidden_price" name="price" value="'.StoreProduct::formatPrice($totalPrice, true).'">';
-							}?> </span>
-                        </div>
-				<?php if(Yii::app()->user->isGuest){?>
-				<input type="hidden" id="hidden_price" name="price" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
-				<?php }?>
-				<div style="clear: both;">
-				<input style="float:right;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
-                </div>
+
+				<input style="float:right; margin-right:40px;" class="btn-green btn-to-buy btntostep2" type="submit" id="goStep2" value="<?php echo Yii::t('OrdersModule.core','Proceed to Checkout')?>"/>
 				
 				</td>
                 </tr>
                 </tfoot>
-				
-				<tfoot>
-				</tfoot>
-				 
                 <tbody>
                 <?php foreach($items as $index=>$product): ?>
 				
@@ -492,7 +249,7 @@ echo '<ul class="breadcrumbs">
     <!-- cart-table (end) -->
 
 </div>
-
+<!--    step2 fill order form   (begin)  -->
 <div id="step2">
     <!-- breadcrumbs (begin) -->
     <ul class="breadcrumbs">
@@ -537,9 +294,9 @@ echo '<ul class="breadcrumbs">
             
             <!-- data-form (begin) -->
             <div class="data-form">
-                <b class="title"><?=Yii::t('OrdersModule.core','Recipient details:')?></b>
+                <b class="title"><?=Yii::t('OrdersModule.core','Recipient details')?>:</b>
                 <div class="s2">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Recipient name:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Recipient name')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'receiver_name'); ?>
                     <?php echo CHtml::error($this->form,'receiver_name'); ?>
                 </div>
@@ -550,22 +307,22 @@ echo '<ul class="breadcrumbs">
                     <?php $this->renderPartial('_cities'); ?>
                 </div>
                 <div class="s2">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery to address:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery to address')?>:</span>
                     <?php echo CHtml::activeTextArea($this->form,'address'); ?>
                     <?php echo CHtml::error($this->form,'address'); ?>
                 </div>
                 <div class="s1">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Phone &#8470;1:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Phone &#8470;1')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'phone1'); ?>
                     <?php echo CHtml::error($this->form,'phone1'); ?>
                 </div>
                 <div class="s1">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Phone &#8470;2:')?></span>
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Phone &#8470;2')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'phone2'); ?>
                     <?php echo CHtml::error($this->form,'phone2'); ?>
                 </div>
                 <div class="s1">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery Date:')?> </span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Delivery Date')?>:</span>
                     
                     <?php $lang="ru";
                             if(Yii::app()->language=='en')
@@ -593,15 +350,15 @@ echo '<ul class="breadcrumbs">
                 </div>
 				<div class="s2">
                     <?php echo CHtml::activeCheckBox($this->form,'doPhoto'); ?>
-                    <label for="photo"><?=Yii::t('OrdersModule.core','Photo of the recipient:')." <span class='price'>".StoreProduct::formatPrice($photoPrice*$rate, true)?></span></label>
+                    <label for="photo"><?=Yii::t('OrdersModule.core','Photo of the recipient')." <span class='price'>".StoreProduct::formatPrice($photoPrice*$rate, true)?></span></label>
                 </div>
 				<br>
                  <div class="s2">
                     <?php echo CHtml::activeCheckBox($this->form,'do_card'); ?>
-                    <label for="photo"><?=Yii::t('OrdersModule.core','Greeting card:')." <span class='price'>".StoreProduct::formatPrice($cardPrice*$rate, true)?></span></label>
+                    <label for="photo"><?=Yii::t('OrdersModule.core','Greeting card')." <span class='price'>".StoreProduct::formatPrice($cardPrice*$rate, true)?></span></label>
                 </div>
 				  <div class="s2">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Greeting card text:')?></span>
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Greeting card text')?>:</span>
                     <?php echo CHtml::activeTextArea($this->form,'card_text'); ?>
                     <?php echo CHtml::error($this->form,'card_text'); ?>
                     <div class="tooltip" title="Greeting card text">
@@ -611,11 +368,11 @@ echo '<ul class="breadcrumbs">
 				<?php if ($lang=='') { ?>
 				<div class="s2">
                     <?php echo CHtml::activeCheckBox($this->form,'card_transl'); ?>
-                    <label for="note"><?=Yii::t('OrdersModule.core','Please translate this message from English to Russian:')." <span class='price'>".StoreProduct::formatPrice($translPrice*$rate, true)?></span></label>
+                    <label for="note"><?=Yii::t('OrdersModule.core','Please translate this message from English to Russian')." <span class='price'>".StoreProduct::formatPrice($translPrice*$rate, true)?></span></label>
                 </div>
 			<?	} ?>
                 <div class="s2">
-                    <span class="input-title"><?=Yii::t('OrdersModule.core','Additional Information:')?></span>
+                    <span class="input-title"><?=Yii::t('OrdersModule.core','Additional Information')?>:</span>
                     <?php echo CHtml::activeTextArea($this->form,'comment'); ?>
                     <?php echo CHtml::error($this->form,'comment'); ?>
                     <div class="tooltip" title="Additional info">
@@ -626,19 +383,19 @@ echo '<ul class="breadcrumbs">
             <!-- data-form (end) -->
             <!-- data-form (begin) -->
             <div class="data-form">
-                <b class="title"><?=Yii::t('OrdersModule.core','Your contact information:')?></b>
+                <b class="title"><?=Yii::t('OrdersModule.core','Your contact information')?>:</b>
                 <div class="s2">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Your full name:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Your full name')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'name'); ?>
                     <?php echo CHtml::error($this->form,'name'); ?>
                 </div>
                 <div class="s1">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Country:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Country')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'country'); ?>
                     <?php echo CHtml::error($this->form,'country'); ?>
                 </div>
                 <div class="s1">
-                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','City:')?></span>
+                    <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','City')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'city'); ?>
                     <?php echo CHtml::error($this->form,'city'); ?>
                 </div>
@@ -668,11 +425,13 @@ echo '<ul class="breadcrumbs">
     </div>
 </div>
 
-<input type="hidden" id="discount_promo" name="discount_promo" value="">
+			<input type="hidden" id="discount_promo" name="discount_promo" value="">
 			<input type="hidden" id="discount_minus_promo" name="discount_minus_promo" value="">
-			<input type="hidden" id="hidden_price" name="price2" value="<?php echo StoreProduct::formatPrice($totalPrice, true);?>">
+			<input type="hidden" id="hidden_price" name="order_price" value="<?php 
+			if($regular_discount == false) echo $order_price;
+			else echo $regular_discount['result'];?>">
 <?php echo CHtml::endForm() ?>
-
+<!--    step2 fill order form   (end)  -->
 <!-- related-products (begin) -->
 <?php $this->renderPartial('_extras'); ?>
 <!-- related-products (end) -->
@@ -698,8 +457,8 @@ $(document).ready(function(){
         $("#step1").hide();
         $(".related-products").hide();
         $("#step2").show();
-		price_1 = $("#price_res").text();
-		$("#hidden_price").val(price_1);
+	price_1 = "<?php echo $regular_discount['result']; ?>";
+	$("#hidden_price").val(price_1);
 		
     });
 	
@@ -716,7 +475,7 @@ $(document).ready(function(){
 		$(".recount").prop('disabled', false);
 		$(".recount").css('background-color', '#45ae5b');
 		//$(".btntostep2").hide();
-        //$(".recount").show();
+        	//$(".recount").show();
     });
 	$(".minus").click(function(e){
         e.preventDefault();
@@ -737,10 +496,9 @@ $(document).ready(function(){
 		$("#goStep2").show();
 
 		code = $("#OrderCreateForm_coupon").val();
-		price_1 = $("#price_res").text();
-		price = price_1.substring(1);
+		price = "<?php echo $regular_discount['result']; ?>";
 		postForm = {
-            'code': code,
+            		'code': code,
 			'price': price,
         };
 
@@ -750,19 +508,17 @@ $(document).ready(function(){
         data: postForm ,
         success: function (response) {
 			var returnedData = JSON.parse(response);
-			var trimmed = response.substring(1);
-			if(trimmed != '0.00'){
+			if(response != '0.00'){
 				if(returnedData['percent'] == null){
 					$("#mess").show();
 					$("#mess").text("Sorry, this coupon code is invalid or has expired");
 				}else{
-					console.log(returnedData['minus'].substring(1));
-					$("#discount_minus_promo").val(returnedData['minus'].substring(1));
+					$("#discount_minus_promo").val(returnedData['minus']);
 					$("#discount_promo").val(returnedData['percent']);
 					$("#mess").hide();
-					$("#price_res").text(returnedData['price']);
+					$("#price_res").ttext(returnedData['price_format']);
 					$("#discount_mess").text(returnedData['percent']+'% OFF');
-					$("#minus").text('-'+returnedData['minus']);
+					$("#minus").text('-'+returnedData['minus_format']);
 					$("#mess_dis").css({"display": "table-row"});
 					$("#goStep3").prop('disabled', true);
 					//$("#OrderCreateForm_coupon").prop('disabled', true);
