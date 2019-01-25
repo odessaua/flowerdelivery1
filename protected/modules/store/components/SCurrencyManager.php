@@ -112,7 +112,7 @@ class SCurrencyManager extends CComponent
 		else
 			$currency = $this->_active;
 
-		return $currency->rate * $sum;
+		return round($currency->rate * $sum, 1);
 	}
 
 	/**
