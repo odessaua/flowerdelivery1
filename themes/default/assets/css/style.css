@@ -2904,14 +2904,28 @@ body:after {
   font-weight: bold;
   color: #29a943;
 }
-
+.minus, .plus{
+width:10px;
+height:10px;
+background:#f2f2f2;
+border-radius:4px;
+padding:3px 5px 3px 5px;
+border:1px solid #ddd;
+cursor:pointer;
+}
+input{
+height:24px;
+border:1px solid #ddd;
+border-radius:4px;
+padding:0 2px;
+}
 #mess{
-	display: none;
-	position: absolute;
-    border: 1px solid;
-    margin: 42px 0px;
-    padding: 2px 4px 3px 5px;
-    color: #f00;
+display: none;
+position: absolute;
+border: 1px solid;
+margin: 42px 0px;
+padding: 2px 4px 3px 5px;
+color: #f00;
 }
 /* cart-page (end) */
 /* cooperation-page (begin) */
