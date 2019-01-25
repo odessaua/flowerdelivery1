@@ -116,17 +116,12 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                         <input type="radio" name="payment" id="payment4" value="<?= (!empty($payments['WayForPay']->id)) ? $payments['WayForPay']->id : 0; ?>" checked /><label for="payment4">
 <div class="button"><img src="\uploads\visa_wayforpay75-150.png"></div></label>
                        <div class="help-tip">
-					    <p><strong><?= strip_tags($payments['WayForPay']->name); ?></strong>: 
-							<?php echo (!empty($payments['WayForPay']->description))? (strip_tags($payments['WayForPay']->description)): "Online credit card processing. All credit card transactions are encrypted. Accept Visa and MasterCard.";
-							?> 
-						</p>
+					<p><strong><?= strip_tags($payments['WayForPay']->name); ?></strong>: 
+		<?php echo (!empty($payments['WayForPay']->description))? (strip_tags($payments['WayForPay']->description)): "Online credit card processing. All credit card transactions are encrypted. Accept Visa and MasterCard.";?> 
+					</p>
                        </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
-					</li>				
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
+		</li>				
 					
 <hr width=100%>
 <?php endif; ?>
@@ -143,12 +138,8 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
 							?> 
 							</p>
                         </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
-					</li>
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
+		</li>
 <hr width=100%>
 <?php endif; ?>
 
@@ -170,11 +161,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -194,11 +181,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -218,11 +201,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
 						</li>
 <hr width=100%>
 <?php endif; ?>
@@ -243,11 +222,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
                             </p>
                         <?php endif; ?>
                         </div>
-						<?php if(!empty($uah_full_price)){?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($uah_full_price, true)."</span> " ;?>
-						<?php }else{?>
-							<span class="price sum"><?echo StoreProduct::formatPrice($model->full_price*$rate, true)."</span> " ;?>
-						<?php }?>
+			<span class="price sum"><?echo StoreProduct::formatPrice($model->total_price*$rate, true)."</span> " ;?>
 						</li>
 <?php endif; ?>
 </ul>
