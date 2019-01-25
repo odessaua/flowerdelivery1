@@ -294,7 +294,7 @@ echo '<ul class="breadcrumbs">
             
             <!-- data-form (begin) -->
             <div class="data-form">
-                <b class="title"><?=Yii::t('OrdersModule.core','Recipient details')?>:</b>
+                <b class="title"><?=Yii::t('OrdersModule.core','Recipient details')?></b>
                 <div class="s2">
                     <span class="input-title"><span class="req">*</span><?=Yii::t('OrdersModule.core','Recipient name')?>:</span>
                     <?php echo CHtml::activeTextField($this->form,'receiver_name'); ?>
@@ -338,15 +338,17 @@ echo '<ul class="breadcrumbs">
                             'mode'=>'date',
                             'language' => $lang, 
                             'options'=>array(
-                                    'minDate' => ((int)date('G') < 14) ? '0' : '1',
-									'dateFormat' => 'dd/mm/yy',
+                            'minDate' => ((int)date('G') < 14) ? '0' : '1',
+				'dateFormat' => 'dd/mm/yy',
+				'showOtherMonths'=>true,// Show Other month in jquery
+				'selectOtherMonths'=>true,// Select Other month in jquery
                             ),
                             'htmlOptions' => array(
                                 'class' => 'datepicker'
                             ), 
                         ));
                     ?>
-                    <?php echo CHtml::error($this->form,'datetime_delivery'); ?>
+                    <?php echo CHtml::error($this->form,'datetime_del'); ?>
                 </div>
 				<div class="s2">
                     <?php echo CHtml::activeCheckBox($this->form,'doPhoto'); ?>
