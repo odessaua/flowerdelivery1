@@ -424,7 +424,7 @@ class CartController extends Controller
 		$order->receiver_city = $receiver_city;
 		$order->phone1 = $this->form->phone1;
 		$order->phone2 = $this->form->phone2;
-		$order->datetime_del = $this->form->datetime_delivery;
+		$order->datetime_del = $this->form->datetime_del;
 		$order->doPhoto = $this->form->doPhoto;
 		$order->do_card = $this->form->do_card;
 		$order->card_text = $this->form->card_text;
