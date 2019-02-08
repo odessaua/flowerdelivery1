@@ -334,7 +334,7 @@ echo '<ul class="breadcrumbs">
                     Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
                         $this->widget('CJuiDateTimePicker',array(
                             'model'=>$this->form, 
-                            'attribute'=>'datetime_delivery', 
+                            'attribute'=>'datetime_del', 
                             'mode'=>'date',
                             'language' => $lang, 
                             'options'=>array(
