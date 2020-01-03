@@ -342,7 +342,16 @@ echo '<ul class="breadcrumbs">
 				'dateFormat' => 'dd/mm/yy',
 				'showOtherMonths'=>true,// Show Other month in jquery
 				'selectOtherMonths'=>true,// Select Other month in jquery
-                            ),
+				'beforeShowDay' => 'js:function(date){
+                               var array = ["06/01/2020","07/01/2020"];
+                               var string = jQuery.datepicker.formatDate("dd/mm/yy", date);
+
+                               if (array.indexOf(string) == -1){
+                               return [true,"", "Available"];
+							   
+                               } else return [false,"", "Not available"];
+							}
+                            '),
                             'htmlOptions' => array(
                                 'class' => 'datepicker'
                             ), 
